@@ -4,6 +4,10 @@
 
 N/A
 
+## Collaborators 
+Kei Fukutani - kayfuku
+Domingo Haung - DomingoWong
+Tae Lee - leeth7830
 ## Project Outcomes
 1. Enable network compression for point-to-point links in ns-3.
 2. Implement the network application that detects the presence of network compression by end-hosts.
