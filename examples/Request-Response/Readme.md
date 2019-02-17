@@ -21,7 +21,7 @@
 
 5. Observe new ASCII trace and pcap trace files in the top-level directory(Use first.cc)
 
-   $ tcpdump -nn -tt -r request-response-0-1.pcap
+   ```tcpdump -nn -tt -r request-response-0-1.pcap```
    
    reading from file request-response-0-1.pcap, link-type EN10MB (Ethernet)
    2.008000 ARP, Request who-has 10.1.1.2 (ff:ff:ff:ff:ff:ff) tell 10.1.1.1, length 50
