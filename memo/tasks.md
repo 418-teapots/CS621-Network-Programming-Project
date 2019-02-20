@@ -23,6 +23,8 @@
 - how to run the simulation? 
 - how to pass the arguments form the command line?
 - how to write Python script to run the simulation with different parameters?
+- how to plot the arrival time difference?
+- how to use Wireshark?
 
 ## Submission. 
 - Technical usage manual. 
