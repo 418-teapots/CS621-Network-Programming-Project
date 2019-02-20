@@ -3,7 +3,7 @@
 # Tasks.
 
 ## Part 1. Compression Link 
-- 1. how to check the protocol number in the PPP packet?
+1. how to check the protocol number in the PPP packet?
 - 2. how to use the configuration file? 
 - 3. what is packet type? 
 - 4. where is the LZS library? 
