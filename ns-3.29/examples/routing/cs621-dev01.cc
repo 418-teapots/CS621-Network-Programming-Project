@@ -79,6 +79,7 @@ main (int argc, char *argv[])
   // DefaultValue::Bind ()s at run-time, via command-line arguments
   CommandLine cmd;
   bool enableFlowMonitor = false;
+  cmd.AddValue("CompressionLinkCapacity", "Specify the maximum bandwidth", compressionLinkCapacity);
   cmd.AddValue ("EnableMonitor", "Enable Flow Monitor", enableFlowMonitor);
   cmd.Parse (argc, argv);
 
