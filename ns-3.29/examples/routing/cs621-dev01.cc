@@ -78,7 +78,7 @@ main (int argc, char *argv[])
   // Allow the user to override any of the defaults and the above
   // DefaultValue::Bind ()s at run-time, via command-line arguments
   CommandLine cmd;
-  int t = 100; //fixed threshold t = 100 ms
+ // int t = 100; //fixed threshold t = 100 ms
   bool enableFlowMonitor = false;
   long compressionLinkCapacity = 0;
   cmd.AddNonOption("CompressionLinkCapacity", "Specify the maximum bandwidth", compressionLinkCapacity);
