@@ -40,7 +40,7 @@
 // - FTP/TCP flow from n0 to n3, starting at time 1.2 to time 1.35 sec.
 // - UDP packet size of 210 bytes, with per-packet interval 0.00375 sec.
 //   (i.e., DataRate of 448,000 bps)
-// - DropTail queues 
+// - DropTail queues
 // - Tracing of queues and packet receptions to file "simple-global-routing.tr"
 
 #include <iostream>
@@ -55,21 +55,22 @@
 #include "ns3/applications-module.h"
 #include "ns3/flow-monitor-helper.h"
 #include "ns3/ipv4-global-routing-helper.h"
+//#include "ns3/packet.h"
 
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("SimpleGlobalRoutingExample");
 
-int 
+int
 main (int argc, char *argv[])
 {
   // Users may find it convenient to turn on explicit debugging
   // for selected modules; the below lines suggest how to do this
-#if 0 
+#if 0
   LogComponentEnable ("SimpleGlobalRoutingExample", LOG_LEVEL_INFO);
 #endif
 
-  // Set up some default values for the simulation.  Use the 
+  // Set up some default values for the simulation.  Use the
   Config::SetDefault ("ns3::OnOffApplication::PacketSize", UintegerValue (210));
   Config::SetDefault ("ns3::OnOffApplication::DataRate", StringValue ("448kb/s"));
 
@@ -136,14 +137,15 @@ main (int argc, char *argv[])
   // server.SetAttribute ("PacketSize", UintegerValue (responseSize));
   ApplicationContainer apps = server.Install (c.Get (3));
   apps.Start (Seconds (1.0));
-  apps.Stop (Seconds (10.0));
+  apps.Stop (Seconds (20.0));
 
   // (Client)
   // Create a RequestResponseClient application to send UDP datagrams from node zero to
   // node three.
   //
-  uint32_t packetSize = 10;
-  uint32_t maxPacketCount = 5;
+  uint32_t packetSize = 1100;
+  uint32_t maxPacketCount = 6000;
+
   Time interPacketInterval = Seconds (1.);
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
@@ -151,14 +153,20 @@ main (int argc, char *argv[])
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client.Install (c.Get (0));
   apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (10.0));
-
+  apps.Stop (Seconds (20.0));
+  RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
+  client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
+  client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
+  client2.SetAttribute ("PacketSize", UintegerValue (100));
+  apps = client2.Install (c.Get (0));
+  apps.Start (Seconds (2.0));
+  apps.Stop (Seconds (20.0));
 
   // // Create the OnOff application to send UDP datagrams of size
   // // 210 bytes at a rate of 448 Kb/s
   // NS_LOG_INFO ("Create Applications.");
   // uint16_t port = 9;   // Discard port (RFC 863)
-  // OnOffHelper onoff ("ns3::UdpSocketFactory", 
+  // OnOffHelper onoff ("ns3::UdpSocketFactory",
   //                    Address (InetSocketAddress (i2i3.GetAddress (1), port)));
   // onoff.SetConstantRate (DataRate ("448kb/s"));
   // ApplicationContainer apps = onoff.Install (c.Get (0));
@@ -172,7 +180,7 @@ main (int argc, char *argv[])
   // apps.Start (Seconds (1.0));
   // apps.Stop (Seconds (5.0));
 
-  
+
 
   AsciiTraceHelper ascii;
   p2p.EnableAsciiAll (ascii.CreateFileStream ("cs621-dev01.tr"));
