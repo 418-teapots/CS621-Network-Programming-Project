@@ -180,7 +180,7 @@ main (int argc, char *argv[])
   // apps.Start (Seconds (1.0));
   // apps.Stop (Seconds (5.0));
 
-
+  Packet a = Packet();
 
   AsciiTraceHelper ascii;
   p2p.EnableAsciiAll (ascii.CreateFileStream ("cs621-dev01.tr"));
@@ -194,8 +194,9 @@ main (int argc, char *argv[])
     }
 
   NS_LOG_INFO ("Run Simulation.");
-  Simulator::Stop (Seconds (11));
+  //Simulator::Schedule(Seconds(0.2),&sendHandler,udp, nodes2, Ptr<Packet>(&a));
   Simulator::Run ();
+  Simulator::Stop (Seconds (20));
   NS_LOG_INFO ("Done.");
 
   if (enableFlowMonitor)
