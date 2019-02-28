@@ -195,8 +195,9 @@ main (int argc, char *argv[])
 
   NS_LOG_INFO ("Run Simulation.");
   //Simulator::Schedule(Seconds(0.2),&sendHandler,udp, nodes2, Ptr<Packet>(&a));
-  Simulator::Run ();
   Simulator::Stop (Seconds (20));
+  Simulator::Run ();
+  
   NS_LOG_INFO ("Done.");
 
   if (enableFlowMonitor)
