@@ -161,7 +161,9 @@ main (int argc, char *argv[])
   apps = client2.Install (c.Get (0));
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
-
+  srandom(getpid());
+  for (i=0; i<MAX_PACK_SZ-1; i++)
+  random_data[i]=(char)(random()&0x000000ff);
   // // Create the OnOff application to send UDP datagrams of size
   // // 210 bytes at a rate of 448 Kb/s
   // NS_LOG_INFO ("Create Applications.");
