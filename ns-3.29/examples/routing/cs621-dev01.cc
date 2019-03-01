@@ -182,8 +182,6 @@ main (int argc, char *argv[])
   // apps.Start (Seconds (1.0));
   // apps.Stop (Seconds (5.0));
 
-  Packet a = Packet();
-
   AsciiTraceHelper ascii;
   p2p.EnableAsciiAll (ascii.CreateFileStream ("cs621-dev01.tr"));
   p2p.EnablePcapAll ("cs621-dev01");
