@@ -3,5 +3,5 @@
 !/ns-3.29/examples/routing/simple-global-routing.cc
 !/ns-3.29/examples/routing/wscript
 !/ns-3.29/examples/routing/cs621-dev01.cc
-
+!/ns-3.29/src/applications/model/request-response-client.cc
 !library/
