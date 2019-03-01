@@ -151,6 +151,7 @@ main (int argc, char *argv[])
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
+  client.SetFill( UintegerValue(0),  UintegerValue(1100));
   apps = client.Install (c.Get (0));
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
