@@ -153,7 +153,7 @@ main (int argc, char *argv[])
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   
   apps = client.Install (c.Get (0));
-  client.SetFill(c.Get (0), (uint8_t)0, (uint32_t)1100);
+  client.SetFill(client, (uint8_t)0, (uint32_t)1100);
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
