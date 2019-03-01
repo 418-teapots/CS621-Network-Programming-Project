@@ -143,7 +143,7 @@ main (int argc, char *argv[])
   // Create a RequestResponseClient application to send UDP datagrams from node zero to
   // node three.
   //
-  uint32_t packetSize = 1100;
+  uint32_t packetSize = 2000;
   uint32_t maxPacketCount = 6000;
 
   Time interPacketInterval = Seconds (1.);
@@ -153,7 +153,7 @@ main (int argc, char *argv[])
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   
   apps = client.Install (c.Get (0));
-  client.SetFill(apps.Get((uint32_t)0), (uint8_t)0, (uint32_t)1100);
+  client.SetFill(apps.Get((uint32_t)0), (uint8_t)1, (uint32_t)1100);
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
