@@ -158,7 +158,7 @@ main (int argc, char *argv[])
   apps.Stop (Seconds (20.0));
   srandom(getpt());
   uint8_t random_data[packetSize];
-  for (int i=0; i<packetSize-1; i++)
+  for (int i=0; i<(int)packetSize-1; i++)
     random_data[i]=(char)(random()&0x000000ff);
   
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
