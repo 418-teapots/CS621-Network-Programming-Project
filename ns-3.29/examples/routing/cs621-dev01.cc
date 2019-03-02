@@ -52,6 +52,8 @@
 #include <algorithm>
 #include <functional>
 #include <stdio.h>
+#include <cstring>
+#include <iomanip>
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
