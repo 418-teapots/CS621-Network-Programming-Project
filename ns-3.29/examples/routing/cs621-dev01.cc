@@ -157,20 +157,20 @@ main (int argc, char *argv[])
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
   srandom(getpid());
-  random_data[] = new uint8_t[packetSize]
-  for (i=0; i<packetSize-1; i++)
+  random_data = new uint8_t[packetSize]
+  for (int i=0; i<packetSize-1; i++)
     random_data[i]=(char)(random()&0x000000ff);
   
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
-  apps2 = client2.Install (c.Get (0));
-  apps2.Get((uint32_t)0).SetFill(random_data, (uint32_t)packetSize);
+  apps = client2.Install (c.Get (0));
+  apps.Get((uint32_t)0).SetFill(random_data, (uint32_t)packetSize);
   
   
-  apps2.Start (Seconds (2.0));
-  apps2.Stop (Seconds (20.0));
+  apps.Start (Seconds (2.0));
+  apps.Stop (Seconds (20.0));
   
   // // Create the OnOff application to send UDP datagrams of size
   // // 210 bytes at a rate of 448 Kb/s
