@@ -166,7 +166,7 @@ main (int argc, char *argv[])
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
-  apps.Get((uint32_t)0).SetFill(random_data, (uint32_t)packetSize);
+  client2.SetFill(apps.Get((uint32_t)0), random_data, (uint32_t)packetSize);
   
   
   apps.Start (Seconds (2.0));
