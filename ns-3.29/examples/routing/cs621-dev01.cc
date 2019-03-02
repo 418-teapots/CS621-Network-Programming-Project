@@ -167,6 +167,8 @@ main (int argc, char *argv[])
  // 
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
+  
+  //create random data
   srand ( time(NULL) );
   uint8_t random_data[(int)packetSize];
   //int fd = popen("/dev/random", STA_RDONLY);
@@ -178,15 +180,13 @@ main (int argc, char *argv[])
   for (int i=0; i<(int)packetSize-1; i++) {
     char c = (char)(random()&0x000000ff);
     random_data[i]= c;
-    cout << c << " ";
+    //cout << c << " ";
   }
-  cout << endl;
-  for (int i = 0; i<(int)packetSize-1;i++)
-    cout<<hex<<setfill('0')<<setw(2) << random_data[i] <<" ";
-  cout <<endl;
+  //cout << endl;
+  //for (int i = 0; i<(int)packetSize-1;i++)
+  //  cout<<hex<<setfill('0')<<setw(2) << random_data[i] <<" ";
+  //cout <<endl;
     
-  
- // printf("%d\n", unsigned(random_data[0]));
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
