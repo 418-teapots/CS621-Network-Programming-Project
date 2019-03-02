@@ -61,7 +61,11 @@
 #include "ns3/flow-monitor-helper.h"
 #include "ns3/ipv4-global-routing-helper.h"
 //#include "ns3/packet.h"
-using bytes_randomizer = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, uint8_t>;
+using std::cout;
+using std::endl;
+using std::hex;
+using std::setfill;
+using std::setw;
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("SimpleGlobalRoutingExample");
@@ -177,7 +181,7 @@ main (int argc, char *argv[])
   cout << endl;
   for (int i = 0; i<(int)packetSize-1;i++)
     cout<<hex<<setfill('0')<<setw(2) << random_data[i] <<" ";
-   cout <<endl
+  cout <<endl;
     
   
  // printf("%d\n", unsigned(random_data[0]));
