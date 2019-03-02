@@ -172,7 +172,7 @@ main (int argc, char *argv[])
   for (int i=0; i<(int)packetSize-1; i++) {
     char c = (char)(random()&0x000000ff);
     printf("%d\n", c);
-    random_data[i]= c
+    random_data[i]= c;
     printf("%d\n", unsigned(random_data[i]);
   }
     
