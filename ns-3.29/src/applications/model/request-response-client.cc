@@ -296,7 +296,7 @@ RequestResponseClient::SetFill (uint8_t *fill, uint32_t fillSize, uint32_t dataS
 }
 
 void
-RequestResponseClient::SetFill (uint8_t[] data, uint32_t dataSize)
+RequestResponseClient::SetFill (uint8_t data[], uint32_t dataSize)
 {
   delete [] m_data;
   //m_data = new uint8_t [dataSize];
