@@ -156,8 +156,8 @@ main (int argc, char *argv[])
  // 
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
-  srandom(getpid());
-  random_data = new uint8_t[packetSize]
+  srandom(getpt());
+  uint8_t random_data[] = new uint8_t[packetSize]
   for (int i=0; i<packetSize-1; i++)
     random_data[i]=(char)(random()&0x000000ff);
   
