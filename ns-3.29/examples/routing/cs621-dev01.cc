@@ -158,8 +158,11 @@ main (int argc, char *argv[])
   apps.Stop (Seconds (20.0));
   srand ( time(NULL) );
   uint8_t random_data[packetSize];
-  for (int i=0; i<(int)packetSize-1; i++)
-    random_data[i]=(char)(random()&0x000000ff);
+  int fd = open("/dev/random", O_RDONLY);
+  read(fd, random_data, packetSize);
+  
+  //for (int i=0; i<(int)packetSize-1; i++)
+  //  random_data[i]=(char)(random()&0x000000ff);
   printf("%d\n", random_data[0]);
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
