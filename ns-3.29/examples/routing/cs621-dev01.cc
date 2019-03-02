@@ -165,7 +165,7 @@ main (int argc, char *argv[])
   uint8_t random_data[packetSize];
   //int fd = popen("/dev/random", STA_RDONLY);
   //fread(fd, random_data, packetSize);
-  bytes_randomizer br;
+  //bytes_randomizer br;
   std::random_device rd;
   bytes_randomizer br(rd());
   std::generate(std::begin(data), std::end(data), std::ref(br));
