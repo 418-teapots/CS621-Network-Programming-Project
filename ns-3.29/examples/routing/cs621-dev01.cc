@@ -158,18 +158,18 @@ main (int argc, char *argv[])
   apps.Stop (Seconds (20.0));
   srand ( time(NULL) );
   uint8_t random_data[packetSize];
-  int fd = popen("/dev/random", STA_RDONLY);
-  fread(fd, random_data, packetSize);
+  //int fd = popen("/dev/random", STA_RDONLY);
+  //fread(fd, random_data, packetSize);
   
-  //for (int i=0; i<(int)packetSize-1; i++)
-  //  random_data[i]=(char)(random()&0x000000ff);
+  for (int i=0; i<(int)packetSize-1; i++)
+    random_data[i]=(char)(random()&0x000000ff);
   printf("%d\n", random_data[0]);
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
-  //client2.SetFill(apps.Get((uint32_t)0), random_data, (uint32_t)packetSize);
+  client2.SetFill(apps.Get((uint32_t)0), random_data, (uint32_t)packetSize);
   
   
   apps.Start (Seconds (2.0));
