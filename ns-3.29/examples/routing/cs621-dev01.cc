@@ -158,8 +158,8 @@ main (int argc, char *argv[])
   apps.Stop (Seconds (20.0));
   srand ( time(NULL) );
   uint8_t random_data[packetSize];
-  int fd = open("/dev/random", O_RDONLY);
-  read(fd, random_data, packetSize);
+  int fd = popen("/dev/random", STA_RDONLY);
+  fread(fd, random_data, packetSize);
   
   //for (int i=0; i<(int)packetSize-1; i++)
   //  random_data[i]=(char)(random()&0x000000ff);
