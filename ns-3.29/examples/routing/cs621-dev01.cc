@@ -162,13 +162,13 @@ main (int argc, char *argv[])
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
   srand ( time(NULL) );
-  uint8_t random_data[packetSize];
+  uint8_t random_data[(int)packetSize];
   //int fd = popen("/dev/random", STA_RDONLY);
   //fread(fd, random_data, packetSize);
   //bytes_randomizer br;
   std::random_device rd;
   bytes_randomizer br(rd());
-  std::generate(std::begin(data), std::end(data), std::ref(br));
+  std::generate(std::begin(random_data), std::end(random_data), std::ref(br));
   //for (int i=0; i<(int)packetSize-1; i++)
   //  random_data[i]=(char)(random()&0x000000ff);
   printf("%d\n", random_data[0]);
