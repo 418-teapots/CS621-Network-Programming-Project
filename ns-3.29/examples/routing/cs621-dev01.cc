@@ -166,12 +166,12 @@ main (int argc, char *argv[])
   //int fd = popen("/dev/random", STA_RDONLY);
   //fread(fd, random_data, packetSize);
   //bytes_randomizer br;
-  std::random_device rd;
-  bytes_randomizer br(rd());
-  std::generate(std::begin(random_data), std::end(random_data), std::ref(br));
-  //for (int i=0; i<(int)packetSize-1; i++)
-  //  random_data[i]=(char)(random()&0x000000ff);
-  printf("%d\n", random_data[0]);
+  //std::random_device rd;
+  //bytes_randomizer br(rd());
+  //std::generate(std::begin(random_data), std::end(random_data), std::ref(br));
+  for (int i=0; i<(int)packetSize-1; i++)
+    random_data[i]=(char)(random()&0x000000ff);
+  printf("%d\n", (unsigned char) random_data[0]);
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
