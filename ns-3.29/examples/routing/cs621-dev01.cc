@@ -173,11 +173,11 @@ main (int argc, char *argv[])
     char c = (char)(random()&0x000000ff);
     printf("%d\n", c);
     random_data[i]= c;
-    printf("%d\n", unsigned(random_data[i]);
+    printf("%d\n", random_data[i]);
   }
     
   
-  printf("%d\n", unsigned(random_data[0]));
+ // printf("%d\n", unsigned(random_data[0]));
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
