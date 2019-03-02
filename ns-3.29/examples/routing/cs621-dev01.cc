@@ -169,8 +169,14 @@ main (int argc, char *argv[])
   //std::random_device rd;
   //bytes_randomizer br(rd());
   //std::generate(std::begin(random_data), std::end(random_data), std::ref(br));
-  for (int i=0; i<(int)packetSize-1; i++)
-    random_data[i]=(char)(random()&0x000000ff);
+  for (int i=0; i<(int)packetSize-1; i++) {
+    char c = (char)(random()&0x000000ff);
+    printf("%d\n", c);
+    random_data[i]= c
+    printf("%d\n", unsigned(random_data[i]);
+  }
+    
+  
   printf("%d\n", unsigned(random_data[0]));
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
