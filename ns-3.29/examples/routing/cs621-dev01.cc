@@ -178,7 +178,7 @@ main (int argc, char *argv[])
   for (int i=0; i<(int)packetSize-1; i++) {
     char c = (char)(random()&0x000000ff);
     random_data[i]= c;
-    cout << random_data[i] << " ";
+    cout << c << " ";
   }
   cout << endl;
   for (int i = 0; i<(int)packetSize-1;i++)
