@@ -160,7 +160,7 @@ main (int argc, char *argv[])
   uint8_t random_data[packetSize];
   for (int i=0; i<(int)packetSize-1; i++)
     random_data[i]=(char)(random()&0x000000ff);
-  
+  printf("%d\n", random_data[0])
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
