@@ -153,19 +153,25 @@ main (int argc, char *argv[])
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   
   apps = client.Install (c.Get (0));
- // client.SetFill(apps.Get((uint32_t)0), (uint8_t)1, (uint32_t)1100);
+ // 
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
+  srandom(getpid());
+  random_data[] = new uint8_t[packetSize]
+  for (i=0; i<packetSize-1; i++)
+    random_data[i]=(char)(random()&0x000000ff);
+  
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
-  client2.SetAttribute ("PacketSize", UintegerValue (100));
-  apps = client2.Install (c.Get (0));
-  apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (20.0));
-  //srandom(getpid());
- // for (i=0; i<MAX_PACK_SZ-1; i++)
-  //random_data[i]=(char)(random()&0x000000ff);
+  client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
+  apps2 = client2.Install (c.Get (0));
+  apps2.Get((uint32_t)0).SetFill(random_data, (uint32_t)packetSize);
+  
+  
+  apps2.Start (Seconds (2.0));
+  apps2.Stop (Seconds (20.0));
+  
   // // Create the OnOff application to send UDP datagrams of size
   // // 210 bytes at a rate of 448 Kb/s
   // NS_LOG_INFO ("Create Applications.");
