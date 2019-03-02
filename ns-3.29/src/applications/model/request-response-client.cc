@@ -298,10 +298,26 @@ RequestResponseClient::SetFill (uint8_t *fill, uint32_t fillSize, uint32_t dataS
 void
 RequestResponseClient::SetFill (uint8_t data[], uint32_t dataSize)
 {
+  //NS_LOG_FUNCTION (this << fill << dataSize);
+  if (dataSize != m_dataSize)
+    {
+      delete [] m_data;
+      m_data = new uint8_t [dataSize];
+      m_dataSize = dataSize;
+    }
+
+  memcpy (m_data, data, dataSize);
+
+  //
+  // Overwrite packet size attribute.
+  //
+  m_size = dataSize;
+  /*memset (m_data, (uint8_t)1, dataSize);
+  m_size = dataSize;
   delete [] m_data;
   //m_data = new uint8_t [dataSize];
   m_dataSize = dataSize;
-  m_data = data;
+  m_data = data;*/
 }
 
 void
