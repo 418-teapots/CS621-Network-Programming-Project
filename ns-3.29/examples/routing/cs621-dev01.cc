@@ -171,10 +171,13 @@ main (int argc, char *argv[])
   //std::generate(std::begin(random_data), std::end(random_data), std::ref(br));
   for (int i=0; i<(int)packetSize-1; i++) {
     char c = (char)(random()&0x000000ff);
-    printf("%d\n", c);
     random_data[i]= c;
-    printf("%d\n", random_data[i]);
+    cout << random_data[i] << " ";
   }
+  cout << endl;
+  for (int i = 0; i<(int)packetSize-1;i++)
+    cout<<hex<<setfill('0')<<setw(2) << random_data[i] <<" ";
+   cout <<endl
     
   
  // printf("%d\n", unsigned(random_data[0]));
