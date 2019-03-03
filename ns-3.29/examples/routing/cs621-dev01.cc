@@ -54,7 +54,15 @@
 #include <stdio.h>
 #include <cstring>
 #include <iomanip>
+#include <map>
 
+#include "ns3/ptr.h"
+#include "ns3/object.h"
+#include "ns3/event-id.h"
+#include "ns3/histogram.h"
+#include "ns3/flow-classifier.h"
+#include "ns3/flow-probe.h"
+#include "ns3/nstime.h"
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
 #include "ns3/internet-module.h"
@@ -62,6 +70,8 @@
 #include "ns3/applications-module.h"
 #include "ns3/flow-monitor-helper.h"
 #include "ns3/ipv4-global-routing-helper.h"
+#include "ns3/ipv4-flow-classifier.h"
+#include "ns3/flow-monitor.h"
 //#include "ns3/packet.h"
 using std::cout;
 using std::endl;
@@ -162,12 +172,12 @@ main (int argc, char *argv[])
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
-  
+
   apps = client.Install (c.Get (0));
- // 
+ //
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
-  
+
   //create random data
   srand ( time(NULL) );
   uint8_t random_data[(int)packetSize];
@@ -186,18 +196,18 @@ main (int argc, char *argv[])
   //for (int i = 0; i<(int)packetSize-1;i++)
   //  cout<<hex<<setfill('0')<<setw(2) << random_data[i] <<" ";
   //cout <<endl;
-    
+
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
   client2.SetFill(apps.Get((uint32_t)0), random_data, (uint32_t)packetSize);
-  
-  
+
+
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
-  
+
   // // Create the OnOff application to send UDP datagrams of size
   // // 210 bytes at a rate of 448 Kb/s
   // NS_LOG_INFO ("Create Applications.");
@@ -222,22 +232,48 @@ main (int argc, char *argv[])
 
   // Flow Monitor
   FlowMonitorHelper flowmonHelper;
-  if (enableFlowMonitor)
-    {
-      flowmonHelper.InstallAll ();
-    }
-
+  Ptr<FlowMonitor> monitor = flowmonHelper.InstallAll ();
   NS_LOG_INFO ("Run Simulation.");
   //Simulator::Schedule(Seconds(0.2),&sendHandler,udp, nodes2, Ptr<Packet>(&a));
   Simulator::Stop (Seconds (20));
   Simulator::Run ();
-  
-  NS_LOG_INFO ("Done.");
-
-  if (enableFlowMonitor)
+  monitor->CheckForLostPackets ();
+  Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
+  std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats ();
+  int64_t first = 0;
+  int64_t second = 0;
+  int count = 0;
+  for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin (); iter != stats.end (); ++iter)
     {
-      flowmonHelper.SerializeToXmlFile ("cs621-dev01.flowmon", false, false);
+      Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
+      if (t.sourceAddress == Ipv4Address("10.1.1.1") && t.destinationAddress == Ipv4Address("10.1.3.2"))
+      {
+        FlowMonitor::FlowStats fs = iter->second;
+        if (first == 0)
+          first = fs.timeLastRxPacket.GetMilliSeconds();
+        else
+          second = fs.timeLastRxPacket.GetMilliSeconds();
+        count ++;
+      }
+
     }
+  if (count > 2)
+  {
+    cout << "more than two trains sent" << endl;
+  }
+  else {
+    if (abs(first-second) > 100) {
+      cout << "Compression Detected" << endl;
+    }
+    else {
+      cout << "Compression Not Detected :(" << endl;
+    }
+  }
+  /*(for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator it = container.begin();it!=container.end();++it)
+  {
+    //cout << it->first << endl;
+  }*/
+  NS_LOG_INFO ("Done.");
 
   Simulator::Destroy ();
   return 0;
