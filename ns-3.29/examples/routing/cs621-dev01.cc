@@ -14,7 +14,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
+//Example commandline: ./waf --run "cs621-dev01 --cap=1"
 
 // Network topology (CS621 project 1)
 //
@@ -101,11 +101,20 @@ main (int argc, char *argv[])
   // Allow the user to override any of the defaults and the above
   // DefaultValue::Bind ()s at run-time, via command-line arguments
   CommandLine cmd;
+  uint32_t packetSize = 1100; //#size of the packets
+  uint32_t maxPacketCount = 1; //# of packets to send
+  std::string outerDataRate = "8Mbps";
   int threshold = 100; //fixed threshold t = 100 ms
-  long compressionLinkCapacity = 0;
-  cmd.AddNonOption("CompressionLinkCapacity", "Specify the maximum bandwidth", compressionLinkCapacity);
+  int compressionLinkCapacity = 0;
+  bool useCompression = true;
+  cmd.AddValue("cap", "Specify the maximum bandwidth", compressionLinkCapacity);
+  cmd.AddValue("comp", "Use compression?", useCompression);
   cmd.Parse (argc, argv);
-
+  if (compressionLinkCapacity == 0) {
+    cout << "You must specify the compression link capacity!" << endl;
+    return 0;
+  }
+  std::string innerDataRate = std::to_string(compressionLinkCapacity) + "Mbps";
   // Here, we will explicitly create four nodes.  In more sophisticated
   // topologies, we could configure a node factory.
   NS_LOG_INFO ("Create nodes.");
@@ -121,12 +130,12 @@ main (int argc, char *argv[])
   // We create the channels first without any IP addressing information
   NS_LOG_INFO ("Create channels.");
   PointToPointHelper p2p;
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("8Mbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue (outerDataRate));
   p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
   NetDeviceContainer d0d1 = p2p.Install (n0n1);
   NetDeviceContainer d2d3 = p2p.Install (n2n3);
 
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("1500kbps"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue (innerDataRate));
   p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
   NetDeviceContainer d1d2 = p2p.Install (n1n2);
 
@@ -162,14 +171,12 @@ main (int argc, char *argv[])
   // (Client)
   // Create a RequestResponseClient application to send UDP datagrams from node zero to
   // node three.
-  //
-  uint32_t packetSize = 2000;
-  uint32_t maxPacketCount = 1;
 
-  Time interPacketInterval = Seconds (1.);
+
+  //Time interPacketInterval = Seconds (1.);
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
-  client.SetAttribute ("Interval", TimeValue (interPacketInterval));
+  //client.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
 
   apps = client.Install (c.Get (0));
@@ -177,53 +184,22 @@ main (int argc, char *argv[])
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
 
-  //create random data
+  //create random data for high entropy
   srand ( time(NULL) );
   uint8_t random_data[(int)packetSize];
-  //int fd = popen("/dev/random", STA_RDONLY);
-  //fread(fd, random_data, packetSize);
-  //bytes_randomizer br;
-  //std::random_device rd;
-  //bytes_randomizer br(rd());
-  //std::generate(std::begin(random_data), std::end(random_data), std::ref(br));
   for (int i=0; i<(int)packetSize-1; i++) {
     char c = (char)(random()&0x000000ff);
     random_data[i]= c;
-    //cout << c << " ";
   }
-  //cout << endl;
-  //for (int i = 0; i<(int)packetSize-1;i++)
-  //  cout<<hex<<setfill('0')<<setw(2) << random_data[i] <<" ";
-  //cout <<endl;
 
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
-  client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
+//client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
   client2.SetFill(apps.Get((uint32_t)0), random_data, (uint32_t)packetSize);
-
-
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
-
-  // // Create the OnOff application to send UDP datagrams of size
-  // // 210 bytes at a rate of 448 Kb/s
-  // NS_LOG_INFO ("Create Applications.");
-  // uint16_t port = 9;   // Discard port (RFC 863)
-  // OnOffHelper onoff ("ns3::UdpSocketFactory",
-  //                    Address (InetSocketAddress (i2i3.GetAddress (1), port)));
-  // onoff.SetConstantRate (DataRate ("448kb/s"));
-  // ApplicationContainer apps = onoff.Install (c.Get (0));
-  // apps.Start (Seconds (1.0));
-  // apps.Stop (Seconds (5.0));
-
-  // // Create a packet sink to receive these packets
-  // PacketSinkHelper sink ("ns3::UdpSocketFactory",
-  //                        Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  // apps = sink.Install (c.Get (3));
-  // apps.Start (Seconds (1.0));
-  // apps.Stop (Seconds (5.0));
 
   AsciiTraceHelper ascii;
   p2p.EnableAsciiAll (ascii.CreateFileStream ("cs621-dev01.tr"));
@@ -268,10 +244,6 @@ main (int argc, char *argv[])
       cout << "Compression Not Detected :(" << endl;
     }
   }
-  /*(for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator it = container.begin();it!=container.end();++it)
-  {
-    //cout << it->first << endl;
-  }*/
   NS_LOG_INFO ("Done.");
 
   Simulator::Destroy ();
