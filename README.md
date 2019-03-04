@@ -1,19 +1,5 @@
 # Network Programming Project 1 - Compression Link
 
-## Installation
-
-N/A
-## Tools used
-ns3 - https://www.nsnam.org/
-## Collaborators 
-Kei Fukutani - kayfuku   
-Domingo Haung - DomingoWong   
-Tae Lee - leeth7830   
-## Project Outcomes
-1. Enable network compression for point-to-point links in ns-3.
-2. Implement the network application that detects the presence of network compression by end-hosts.
-3. Verify and validate your simulated compression link and compression detection application.
-
 ## Overview
 
 For this project you will implement a network level compression link. You will then implement a network application
@@ -23,6 +9,19 @@ read in detail up to Section VI.
 Crucial to success in this project will be a deep and detailed reading and understanding of the ns-3 documentation,
 where it is relevant to your project. Among the ns-3 documentation are tutorials, a reference manual, a model
 library, and a full API reference. You should explore and make use of all of these resources.
+
+## Installation
+# Tools required
+ns3 - https://www.nsnam.org/
+# Steps
+
+
+ 
+## Project Outcomes
+1. Enable network compression for point-to-point links in ns-3.
+2. Implement the network application that detects the presence of network compression by end-hosts.
+3. Verify and validate your simulated compression link and compression detection application.
+
 
 ## Components
 
@@ -49,10 +48,15 @@ using /dev/random.
 Create a 4-node topology in ns-3 as illustrated in Figure 1. Nodes S and R are the end-hosts running the network
 application. Nodes R1 and R2 are the intermediate routers where the link between them is compression-enabled.
 Your simulations should also be built using ns-3. You should include four logically separate simulations, each doing
-one of the following:
-• Transmit low entropy data over a network topology without a compression link.
-• Transmit high entropy data over a network topology without a compression link.
-• Transmit low entropy data over a network topology with a compression link.
-• Transmit high entropy data over a network topology with a compression link.
+one of the following:   
+• Transmit low entropy data over a network topology without a compression link.   
+• Transmit high entropy data over a network topology without a compression link.   
+• Transmit low entropy data over a network topology with a compression link.   
+• Transmit high entropy data over a network topology with a compression link.   
 Make sure you are careful to control for confounding variables across your four simulations, as you will ultimately
 be comparing time between these four simulation types so as to try and detect the compression link.
+
+## Collaborators 
+Kei Fukutani - kayfuku   
+Domingo Haung - DomingoWong   
+Tae Lee - leeth7830  
