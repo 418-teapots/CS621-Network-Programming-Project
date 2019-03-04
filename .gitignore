@@ -7,3 +7,4 @@
 !/ns-3.29/src/applications/model/request-response-client.h
 !/ns-3.29/src/applications/helper/request-response-helper.cc
 !/ns-3.29/src/applications/helper/request-response-helper.h
+!run.py
