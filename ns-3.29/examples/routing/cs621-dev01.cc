@@ -87,24 +87,23 @@ main (int argc, char *argv[])
 {
   // Users may find it convenient to turn on explicit debugging
   // for selected modules; the below lines suggest how to do this
-#if 0
+/*#if 0
   LogComponentEnable ("SimpleGlobalRoutingExample", LOG_LEVEL_INFO);
-#endif
+#endif*/
 
   // Set up some default values for the simulation.  Use the
+  /*
   Config::SetDefault ("ns3::OnOffApplication::PacketSize", UintegerValue (210));
   Config::SetDefault ("ns3::OnOffApplication::DataRate", StringValue ("448kb/s"));
-
+*/
   //DefaultValue::Bind ("DropTailQueue::m_maxPackets", 30);
 
   // Allow the user to override any of the defaults and the above
   // DefaultValue::Bind ()s at run-time, via command-line arguments
   CommandLine cmd;
- // int t = 100; //fixed threshold t = 100 ms
-  bool enableFlowMonitor = false;
+  int threshold = 100; //fixed threshold t = 100 ms
   long compressionLinkCapacity = 0;
   cmd.AddNonOption("CompressionLinkCapacity", "Specify the maximum bandwidth", compressionLinkCapacity);
-  cmd.AddValue ("EnableMonitor", "Enable Flow Monitor", enableFlowMonitor);
   cmd.Parse (argc, argv);
 
   // Here, we will explicitly create four nodes.  In more sophisticated
@@ -165,7 +164,7 @@ main (int argc, char *argv[])
   // node three.
   //
   uint32_t packetSize = 2000;
-  uint32_t maxPacketCount = 6000;
+  uint32_t maxPacketCount = 1;
 
   Time interPacketInterval = Seconds (1.);
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
@@ -262,7 +261,7 @@ main (int argc, char *argv[])
     cout << "more than two trains sent" << endl;
   }
   else {
-    if (abs(first-second) > 100) {
+    if (abs(first-second) > threshold) {
       cout << "Compression Detected" << endl;
     }
     else {
