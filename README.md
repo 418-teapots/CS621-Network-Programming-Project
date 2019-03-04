@@ -10,11 +10,16 @@ Crucial to success in this project will be a deep and detailed reading and under
 where it is relevant to your project. Among the ns-3 documentation are tutorials, a reference manual, a model
 library, and a full API reference. You should explore and make use of all of these resources.
 
-## Installation
+## Installation/Usage Guide
 # Tools required
-ns3 - https://www.nsnam.org/
-# Steps
+* [ns3] (https://www.nsnam.org/) - Network Simulator
+* [Python] (https://www.python.org/) - Programming Language
 
+# Steps
+1. 
+2.
+3.
+4. Run run.py using commandline: "python run.py"
 
  
 ## Project Outcomes
