@@ -26,7 +26,7 @@ gcc zlib-test.cc -lz -o zlib-test
 
 ## 3. Run 
 
-zlib-test
+./zlib-test
 
 
 
