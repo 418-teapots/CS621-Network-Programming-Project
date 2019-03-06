@@ -1,6 +1,6 @@
 
 
-# zlib instruction
+# Zlib Instruction
 
 ## 1. Install
 
