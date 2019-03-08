@@ -4,10 +4,7 @@
 def build(bld):
     module = bld.create_ns3_module('point-to-point', ['network', 'mpi'])
     module.source = [
-        # Kei 3/3.
-        # 'model/point-to-point-net-device.cc',
-        # Kei 3/3. 
-        'model/cs621-ppp-net-device.cc', 
+        'model/point-to-point-net-device.cc',
         'model/point-to-point-channel.cc',
         'model/point-to-point-remote-channel.cc',
         'model/ppp-header.cc',
@@ -22,10 +19,7 @@ def build(bld):
     headers = bld(features='ns3header')
     headers.module = 'point-to-point'
     headers.source = [
-        # Kei 3/3. 
-        # 'model/point-to-point-net-device.h',
-        # Kei 3/3. 
-        'model/cs621-ppp-net-device.h', 
+        'model/point-to-point-net-device.h',
         'model/point-to-point-channel.h',
         'model/point-to-point-remote-channel.h',
         'model/ppp-header.h',
