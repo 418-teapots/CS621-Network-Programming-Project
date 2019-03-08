@@ -10,4 +10,6 @@
 !/ns-3.29/src/point-to-point/model/cs621-ppp-net-device.cc
 !/ns-3.29/src/point-to-point/model/cs621-ppp-net-device.h
 !/ns-3.29/src/point-to-point/wscript
+!/ns-3.29/wscript
+!/ns-3.29/config/config.txt
 !run.py
