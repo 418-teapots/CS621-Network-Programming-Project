@@ -85,6 +85,23 @@ public:
    * This is the destructor for the PointToPointNetDevice.
    */
   virtual ~PointToPointNetDevice ();
+  
+  /** CS621
+   * Set m_compressionFlag to true;
+   */
+  void SetCompressionFlag (bool flagValue);
+  
+  /**CS621
+   * Return m_compressionFlag
+   */
+  bool GetCompressionFlag ();
+  
+  void SetDecompressionFlag (bool flagValue);
+  
+  /**CS621
+   * Return m_compressionFlag
+   */
+  bool GetDecompressionFlag ();
 
   /**
    * Set the Data Rate used for transmission of packets.  The data rate is
@@ -285,6 +302,16 @@ private:
    * It calls also the linkChange callback.
    */
   void NotifyLinkUp (void);
+
+  /** CS621 
+   * Use to flag if this net device need to compress.
+   */
+  bool m_compressionFlag = false;
+
+  /** CS621
+   * Use to flag if this net device need to decompress.
+   */
+  bool m_decompressionFlag = false;
 
   /**
    * Enumeration of the states of the transmit machine of the net device.

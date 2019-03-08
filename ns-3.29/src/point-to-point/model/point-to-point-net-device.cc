@@ -188,6 +188,31 @@ PointToPointNetDevice::~PointToPointNetDevice ()
   NS_LOG_FUNCTION (this);
 }
 
+void 
+PointToPointNetDevice::SetCompressionFlag (bool flagValue)
+{
+  m_compressionFlag = flagValue;
+}
+
+bool 
+PointToPointNetDevice::GetCompressionFlag ()
+{
+  return m_compressionFlag;
+}
+
+void
+PointToPointNetDevice::SetDecompressionFlag (bool flagValue)
+{
+  m_decompressionFlag = flagValue;
+}
+
+bool
+PointToPointNetDevice::GetDecompressionFlag ()
+{
+  return m_decompressionFlag;
+}
+
+
 void
 PointToPointNetDevice::AddHeader (Ptr<Packet> p, uint16_t protocolNumber)
 {
@@ -543,7 +568,7 @@ bool
 PointToPointNetDevice::Send (
   Ptr<Packet> packet, 
   const Address &dest, 
-  uint16_t protocolNumber)
+  uint16_t protocolNumber)//0x0021
 {
   NS_LOG_FUNCTION (this << packet << dest << protocolNumber);
   NS_LOG_LOGIC ("p=" << packet << ", dest=" << &dest);
@@ -563,7 +588,45 @@ PointToPointNetDevice::Send (
   // Stick a point to point protocol header on the packet in preparation for
   // shoving it out the door.
   //
-  AddHeader (packet, protocolNumber);
+
+  if (protocolNumber == 2048) //&& GetCompressionFlag()
+    {
+      //std::cout << "True";
+
+      uint8_t *readBuffer = new uint8_t[packet->GetSize()];
+      packet->CopyData(readBuffer, packet->GetSize());
+
+      unsigned char* dataBeforeCompress = new unsigned char[packet->GetSize()+4];
+      dataBeforeCompress[0] = 0x0;
+      dataBeforeCompress[1] = 0x0;
+      dataBeforeCompress[2] = 0x2;
+      dataBeforeCompress[3] = 0x1;
+
+
+      for (uint i = 0; i < sizeof(readBuffer); i++) {
+        dataBeforeCompress[i+4] = readBuffer[i];
+      }
+
+      //Call Compress() from dataBeforeCompress to dataAfterCompression;
+      unsigned char* dataAfterCompression = dataBeforeCompress;
+
+
+      AddHeader (packet, 0x4021);
+      /*uint8_t *buffer = new uint8_t[1100];
+      for (uint i = 0; i < sizeof(dataAfterCompression); i++) {
+        buffer[i] = dataAfterCompression[i];
+      }
+      */
+      packet->CopyData(dataAfterCompression, 1100);
+    } 
+  else {
+    AddHeader (packet, protocolNumber);
+    // if the protocol Number is 2048 which means 0x0800, return 0021
+    // 0021 -> 4021
+  }
+
+
+  
 
   m_macTxTrace (packet);
 
@@ -689,6 +752,7 @@ PointToPointNetDevice::PppToEther (uint16_t proto)
     {
     case 0x0021: return 0x0800;   //IPv4
     case 0x0057: return 0x86DD;   //IPv6
+    case 0x4021: return 0x0800;   //Compression IPv4
     default: NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
     }
   return 0;
@@ -702,6 +766,7 @@ PointToPointNetDevice::EtherToPpp (uint16_t proto)
     {
     case 0x0800: return 0x0021;   //IPv4
     case 0x86DD: return 0x0057;   //IPv6
+    case 0x4021: return 0x4021;   //Compression IPv4
     default: NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
     }
   return 0;

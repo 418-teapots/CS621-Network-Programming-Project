@@ -67,6 +67,9 @@ PppHeader::Print (std::ostream &os) const
     case 0x0057: /* IPv6 */
       proto = "IPv6 (0x0057)";
       break;
+    case 0x4021:
+      proto = "IP Compression (0x4021)";
+      break;
     default:
       NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
     }
