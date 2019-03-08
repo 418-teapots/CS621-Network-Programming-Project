@@ -21,7 +21,7 @@ Type the following on the Linux shell:
 
 ## 2. NS-3.29
 1) ***Install ns-3.29***  
-Type the following on the Linux shell:  
+Type the following on the Linux shell:
 
 ```cd```  
 ```mkdir workspace```  
@@ -30,7 +30,8 @@ Type the following on the Linux shell:
 ```tar xjf ns-allinone-3.29.tar.bz2```  
   
 2) ***Build***  
-If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:  
+If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:
+
 ```cd ns-allinone-3.29```
 ```./build.py --enable-examples --enable-tests```  
   
