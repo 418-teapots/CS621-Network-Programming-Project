@@ -8,7 +8,7 @@
   
 # Steps
 ## 1. NS-3.29
-  1 ***Install ns-3.29*** 
+1) ***Install ns-3.29***  
 Type the following on the Linux shell:  
   
 ```cd```  
@@ -17,18 +17,18 @@ Type the following on the Linux shell:
 ```wget https://www.nsnam.org/release/ns-allinone-3.29.tar.bz2```  
 ```tar xjf ns-allinone-3.29.tar.bz2```  
   
-2) Build  
+2) ***Build***  
 If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:  
   
 ```./build.py --enable-examples --enable-tests```  
   
-3) Test for installation  
+3) ***Test for installation***  
 You can run the unit tests of the ns-3 distribution by running the ./test.py script:  
   
 ```./test.py```
 
 ## 2. zlib
-1) Install zlib  
+1) ***Install zlib***  
   
 ```wget http://zlib.net/zlib-1.2.11.tar.gz```  
 ```tar zxf zlib-1.2.11.tar.gz```  
@@ -39,7 +39,7 @@ You can run the unit tests of the ns-3 distribution by running the ./test.py scr
 ```sudo make install```  
 
 ## 3. Application 
-1) Run  
+1) ***Run***  
 run.py using commandline: "python run.py"  
   
   
