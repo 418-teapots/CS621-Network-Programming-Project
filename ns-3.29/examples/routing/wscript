@@ -1,4 +1,7 @@
 ## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+def configure(conf):
+    conf.env['lz'] = conf.check(mandatory=True, lib='z', uselib_store='LZ')
+#     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
 
 def build(bld):
     obj = bld.create_ns3_program('dynamic-global-routing',
