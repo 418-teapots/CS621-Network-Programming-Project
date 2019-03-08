@@ -7,17 +7,17 @@
 * [zlib] (https://www.zlib.net/) - Compression Library
 
 # Prerequisite installation 
-* python ```sudo apt-get install python```
+* python ```sudo apt-get install python```   
 * zlib ```sudo apt-get install zlib1g-dev```
 
 # Steps
 ## 1. Clone GitHub repository
 Type the following on the Linux shell:
 
-```cd```
-```mkdir GitHub```
-```cd GitHub```
-```git clone https://github.com/418-teapots/CS621-Network-Programming-Project.git```
+```cd```   
+```mkdir GitHub```   
+```cd GitHub```   
+```git clone https://github.com/418-teapots/CS621-Network-Programming-Project.git```   
 
 ## 2. NS-3.29
 1) ***Install ns-3.29***  
@@ -48,7 +48,7 @@ Do not overwrite the exisiting files
 1) ***Test***  
 Under the ns-3 top directory, you can run the application by typing the following:
 
-``` cd /GitHub/CS621-Network-Programming-Project/ns-3.29```
+``` cd /GitHub/CS621-Network-Programming-Project/ns-3.29```   
 ```./waf --run "cs621-dev01 --cap=1"```  
   
 2) ***Run Simulation***  
