@@ -18,8 +18,8 @@ library, and a full API reference. You should explore and make use of all of the
 
 # Steps
 ## 1. NS-3.29
-1) Download ns-3.29
-Type the following on the Linux shell:
+1) Download ns-3.29  
+Type the following on the Linux shell:  
 
 ```cd```  
 ```mkdir workspace```  
@@ -27,18 +27,18 @@ Type the following on the Linux shell:
 ```wget https://www.nsnam.org/release/ns-allinone-3.29.tar.bz2```  
 ```tar xjf ns-allinone-3.29.tar.bz2```  
 
-2) Build
-If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:
+2) Build  
+If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:  
 　　
 ```./build.py --enable-examples --enable-tests```  
 
 
-2.
+## 2.
 
 
-3.
+## 3.
 
-4. Run run.py using commandline: "python run.py"
+## 4. Run run.py using commandline: "python run.py"
 
  
 ## Project Outcomes
