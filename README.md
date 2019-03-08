@@ -11,7 +11,7 @@ where it is relevant to your project. Among the ns-3 documentation are tutorials
 library, and a full API reference. You should explore and make use of all of these resources.
 
 ## Installation/Usage Guide
-Refer to [a relative link](Techical_Manual.md)
+Refer to [Technical_Manual](Techical_Manual.md)
 
  
 ## Project Outcomes
