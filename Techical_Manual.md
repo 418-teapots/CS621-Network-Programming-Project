@@ -22,10 +22,15 @@ library, and a full API reference. You should explore and make use of all of the
 Type the following on the Linux shell:
 
 ```cd```
+
 ```mkdir workspace```
+
 ```cd workspace```
+
 ```wget https://www.nsnam.org/release/ns-allinone-3.29.tar.bz2```
+
 ```tar xjf ns-allinone-3.29.tar.bz2```
+
 
 2) Build
 If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:
