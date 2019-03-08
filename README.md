@@ -40,5 +40,5 @@ We include four logically separate simulations, each doing one of the following:
 
 ## Collaborators 
 Kei Fukutani - kayfuku   
-Domingo Haung - DomingoWong   
+Domingo Huang - DomingoWong   
 Tae Lee - leeth7830  
