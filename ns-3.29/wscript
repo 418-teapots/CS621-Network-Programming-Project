@@ -339,7 +339,7 @@ def print_config(env, phase='configure'):
 
 def configure(conf):
     conf.load('relocation', tooldir=['waf-tools'])
-    conf.env['lz'] = conf.check(mandatory=True, lib='z', uselib_store='LZ')
+    #conf.env['lz'] = conf.check(mandatory=True, lib='z', uselib_store='LZ')
     # attach some extra methods
     conf.check_nonfatal = types.MethodType(_check_nonfatal, conf)
     conf.check_compilation_flag = types.MethodType(_check_compilation_flag, conf)
