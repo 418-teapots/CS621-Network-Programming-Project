@@ -36,6 +36,7 @@
 #include <map>
 #include <zlib.h>
 
+
 #include "ns3/ptr.h"
 #include "ns3/object.h"
 #include "ns3/event-id.h"
@@ -65,15 +66,65 @@ NS_LOG_COMPONENT_DEFINE ("SimpleGlobalRoutingExample");
 int
 main (int argc, char *argv[])
 {
+  //declare  of given variables
 
-  //initialization of given variables
+  uint32_t packetSize; //#size of the packets
+  uint32_t maxPacketCount;//# of packets to send
+  std::string outerDataRate; //link capacity for the two outer links
+  int threshold; //fixed threshold t = 100 ms
+  int compressionLinkCapacity; //link capacity for the inner link
+  bool useCompression; //use compression or not
 
-  uint32_t packetSize = 1100; //#size of the packets
-  uint32_t maxPacketCount = 2; //# of packets to send
-  std::string outerDataRate = "8Mbps"; //link capacity for the two outer links
-  int threshold = 100; //fixed threshold t = 100 ms
-  int compressionLinkCapacity = 0; //link capacity for the inner link
-  bool useCompression = false; //use compression or not
+  //initailze variables with values from config file
+  std::ifstream cFile("config/config.txt");
+  if (cFile.is_open())
+  {
+    cout << "Config file detected" << endl;
+    std::string line;
+    while(getline(cFile, line))
+    {
+      line.erase(std::remove_if(line.begin(), line.end(), isspace), line.end());
+      auto delimiter = line.find("=");
+      auto name = line.substr(0, delimiter);
+      auto value = line.substr(delimiter + 1);
+      if (name == "packetSize") {
+        packetSize = (uint32_t)stoi(value);
+        cout << "Packet Size set to " + std::__cxx11::to_string((int)packetSize) << endl;
+      }
+      else if (name == "maxPacketCount") {
+        maxPacketCount = (uint32_t)stoi(value);
+        cout << "Max Packet Count set to " + std::__cxx11::to_string((int)maxPacketCount) << endl;
+      }
+      else if (name == "outerDataRate") {
+        outerDataRate = value;
+        cout << "Outer Data Rate set to " + outerDataRate << endl;
+      }
+      else if (name == "threshold") {
+        threshold = stoi(value);
+        cout << "Threshold set to " + std::__cxx11::to_string(threshold) << endl;
+      }
+      else if (name == "compressionLinkCapacity") {
+        compressionLinkCapacity = stoi(value);
+        cout << "Compression Link Capacity set to " + std::__cxx11::to_string(compressionLinkCapacity) << endl;
+      }
+      else if (name == "useCompression") {
+        if (value == "0"){
+          useCompression = false;
+          cout << "Compression set to false" << endl;
+        }
+        else {
+          useCompression = true;
+          cout << "Compression set to true" << endl;
+        }
+      }
+    }
+  }
+  else {
+    cout << "No config file detected" << endl;
+    return 0;
+  }
+
+
 
   // Allow the user to override any of the defaults and the above
   CommandLine cmd;
@@ -103,12 +154,12 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Create channels.");
   PointToPointHelper p2p;
   p2p.SetDeviceAttribute ("DataRate", StringValue (outerDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
+//  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
   NetDeviceContainer d0d1 = p2p.Install (n0n1); //outer links
   NetDeviceContainer d2d3 = p2p.Install (n2n3); //outer links
 
   p2p.SetDeviceAttribute ("DataRate", StringValue (innerDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
+//  p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
   NetDeviceContainer d1d2 = p2p.Install (n1n2); //inner link
 
   //Add IP addresses
@@ -206,7 +257,7 @@ main (int argc, char *argv[])
     cout << "more than two trains sent" << endl;
   }
   else {
-    if (abs(first-second) > threshold) { //if the difference between the two trains is bigger than the threshhold 
+    if (abs(first-second) > threshold) { //if the difference between the two trains is bigger than the threshhold
       cout << "Compression Detected" << endl;
     }
     else {
