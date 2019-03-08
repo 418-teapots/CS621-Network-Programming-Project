@@ -89,32 +89,32 @@ main (int argc, char *argv[])
       auto value = line.substr(delimiter + 1);
       if (name == "packetSize") {
         packetSize = (uint32_t)stoi(value);
-        cout << "Packet Size set to " + std::__cxx11::to_string((int)packetSize) << endl;
+        //cout << "Packet Size set to " + std::__cxx11::to_string((int)packetSize) << endl;
       }
       else if (name == "maxPacketCount") {
         maxPacketCount = (uint32_t)stoi(value);
-        cout << "Max Packet Count set to " + std::__cxx11::to_string((int)maxPacketCount) << endl;
+        //cout << "Max Packet Count set to " + std::__cxx11::to_string((int)maxPacketCount) << endl;
       }
       else if (name == "outerDataRate") {
         outerDataRate = value;
-        cout << "Outer Data Rate set to " + outerDataRate << endl;
+        //cout << "Outer Data Rate set to " + outerDataRate << endl;
       }
       else if (name == "threshold") {
         threshold = stoi(value);
-        cout << "Threshold set to " + std::__cxx11::to_string(threshold) << endl;
+        //cout << "Threshold set to " + std::__cxx11::to_string(threshold) << endl;
       }
       else if (name == "compressionLinkCapacity") {
         compressionLinkCapacity = stoi(value);
-        cout << "Compression Link Capacity set to " + std::__cxx11::to_string(compressionLinkCapacity) << endl;
+        //cout << "Compression Link Capacity set to " + std::__cxx11::to_string(compressionLinkCapacity) << endl;
       }
       else if (name == "useCompression") {
         if (value == "0"){
           useCompression = false;
-          cout << "Compression set to false" << endl;
+          //cout << "Compression set to false" << endl;
         }
         else {
           useCompression = true;
-          cout << "Compression set to true" << endl;
+          //cout << "Compression set to true" << endl;
         }
       }
     }
