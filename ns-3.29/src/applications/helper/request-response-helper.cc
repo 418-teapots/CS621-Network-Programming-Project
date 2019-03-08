@@ -113,9 +113,9 @@ RequestResponseClientHelper::SetFill (Ptr<Application> app, uint8_t *fill, uint3
 }
 
 void
-RequestResponseClientHelper::SetFill (Ptr<Application> app, uint8_t data[], uint32_t dataLength)
+RequestResponseClientHelper::SetFill (Ptr<Application> app, bool comp, uint32_t dataLength)
 {
-  app->GetObject<RequestResponseClient>()->SetFill (data, dataLength);
+  app->GetObject<RequestResponseClient>()->SetFill (comp, dataLength);
 }
 
 ApplicationContainer

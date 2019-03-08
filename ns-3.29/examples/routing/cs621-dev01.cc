@@ -26,7 +26,7 @@
 #include <fstream>
 #include <string>
 #include <cassert>
-#include <random>
+
 #include <climits>
 #include <algorithm>
 #include <functional>
@@ -65,25 +65,29 @@ NS_LOG_COMPONENT_DEFINE ("SimpleGlobalRoutingExample");
 int
 main (int argc, char *argv[])
 {
-  // Allow the user to override any of the defaults and the above
-  // DefaultValue::Bind ()s at run-time, via command-line arguments
-  CommandLine cmd;
+
+  //initialization of given variables
+
   uint32_t packetSize = 1100; //#size of the packets
-  uint32_t maxPacketCount = 1; //# of packets to send
-  std::string outerDataRate = "8Mbps";
+  uint32_t maxPacketCount = 2; //# of packets to send
+  std::string outerDataRate = "8Mbps"; //link capacity for the two outer links
   int threshold = 100; //fixed threshold t = 100 ms
-  int compressionLinkCapacity = 0;
-  bool useCompression = true;
+  int compressionLinkCapacity = 0; //link capacity for the inner link
+  bool useCompression = false; //use compression or not
+
+  // Allow the user to override any of the defaults and the above
+  CommandLine cmd;
   cmd.AddValue("cap", "Specify the maximum bandwidth", compressionLinkCapacity);
   cmd.AddValue("comp", "Use compression?", useCompression);
   cmd.Parse (argc, argv);
   if (compressionLinkCapacity == 0) {
-    cout << "You must specify the compression link capacity!" << endl;
+    cout << "You must specify the compression link capacity!" << endl; // must specify compression link capacity
     return 0;
   }
-  std::string innerDataRate = std::to_string(compressionLinkCapacity) + "Mbps";
-  // Here, we will explicitly create four nodes.  In more sophisticated
-  // topologies, we could configure a node factory.
+  std::string innerDataRate = std::to_string(compressionLinkCapacity) + "Mbps"; //set the inner link capcity
+
+
+  //Create four nodes and form a group
   NS_LOG_INFO ("Create nodes.");
   NodeContainer c;
   c.Create (4);
@@ -91,6 +95,7 @@ main (int argc, char *argv[])
   NodeContainer n1n2 = NodeContainer (c.Get (1), c.Get (2));
   NodeContainer n2n3 = NodeContainer (c.Get (2), c.Get (3));
 
+  //install internet
   InternetStackHelper internet;
   internet.Install (c);
 
@@ -99,14 +104,14 @@ main (int argc, char *argv[])
   PointToPointHelper p2p;
   p2p.SetDeviceAttribute ("DataRate", StringValue (outerDataRate));
   p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
-  NetDeviceContainer d0d1 = p2p.Install (n0n1);
-  NetDeviceContainer d2d3 = p2p.Install (n2n3);
+  NetDeviceContainer d0d1 = p2p.Install (n0n1); //outer links
+  NetDeviceContainer d2d3 = p2p.Install (n2n3); //outer links
 
   p2p.SetDeviceAttribute ("DataRate", StringValue (innerDataRate));
   p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
-  NetDeviceContainer d1d2 = p2p.Install (n1n2);
+  NetDeviceContainer d1d2 = p2p.Install (n1n2); //inner link
 
-  // Later, we add IP addresses.
+  //Add IP addresses
   NS_LOG_INFO ("Assign IP Addresses.");
   Ipv4AddressHelper ipv4;
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
@@ -118,14 +123,13 @@ main (int argc, char *argv[])
   ipv4.SetBase ("10.1.3.0", "255.255.255.0");
   Ipv4InterfaceContainer i2i3 = ipv4.Assign (d2d3);
 
-  // Create router nodes, initialize routing database and set up the routing
-  // tables in the nodes.
+  // Create router nodes, initialize routing database and set up the routing tables in the nodes.
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
 
   // (Server)
   // Create a RequestResponseServer application on node three.
-  //
+
   NS_LOG_INFO ("Create Applications.");
   uint16_t port = 9;  // well-known echo port number
   RequestResponseServerHelper server (port);
@@ -136,8 +140,7 @@ main (int argc, char *argv[])
   apps.Stop (Seconds (20.0));
 
   // (Client)
-  // Create a RequestResponseClient application to send UDP datagrams from node zero to
-  // node three.
+  // Create a RequestResponseClient application to send UDP datagrams from node zero to node three.
 
 
   //Time interPacketInterval = Seconds (1.);
@@ -145,26 +148,19 @@ main (int argc, char *argv[])
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   //client.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
-
   apps = client.Install (c.Get (0));
- //
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
 
-  //create random data for high entropy
-  srand ( time(NULL) );
-  uint8_t random_data[(int)packetSize];
-  for (int i=0; i<(int)packetSize-1; i++) {
-    char c = (char)(random()&0x000000ff);
-    random_data[i]= c;
-  }
+
+
 
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
 //client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
-  client2.SetFill(apps.Get((uint32_t)0), random_data, (uint32_t)packetSize);
+  client2.SetFill(apps.Get((uint32_t)0), true , (uint32_t)packetSize);
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
 

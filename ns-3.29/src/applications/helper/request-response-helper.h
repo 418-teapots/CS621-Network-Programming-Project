@@ -183,7 +183,8 @@ public:
    */
   void SetFill (Ptr<Application> app, uint8_t *fill, uint32_t fillLength, uint32_t dataLength);
 
-  void SetFill (Ptr<Application> app, uint8_t datap[], uint32_t dataLength);
+  //create random data for high entropy and add to the data 
+  void SetFill (Ptr<Application> app, bool comp, uint32_t dataLength);
   /**
    * Create a udp echo client application on the specified node.  The Node
    * is provided as a Ptr<Node>.

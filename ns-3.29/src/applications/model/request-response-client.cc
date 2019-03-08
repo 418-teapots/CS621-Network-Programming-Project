@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <random>
+
 #include "ns3/log.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/ipv6-address.h"
@@ -296,28 +298,23 @@ RequestResponseClient::SetFill (uint8_t *fill, uint32_t fillSize, uint32_t dataS
 }
 
 void
-RequestResponseClient::SetFill (uint8_t data[], uint32_t dataSize)
+RequestResponseClient::SetFill (bool comp, uint32_t dataSize)
 {
   //NS_LOG_FUNCTION (this << fill << dataSize);
+  srand ( time(NULL) );
+  uint8_t random_data[(int)dataSize];
+  for (int i=0; i<(int)dataSize-1; i++) {
+    char c = (char)(random()&0x000000ff);
+    random_data[i]= c;
+  }
   if (dataSize != m_dataSize)
     {
       delete [] m_data;
       m_data = new uint8_t [dataSize];
       m_dataSize = dataSize;
     }
-
-  memcpy (m_data, data, dataSize);
-
-  //
-  // Overwrite packet size attribute.
-  //
+  memcpy (m_data, random_data, dataSize);
   m_size = dataSize;
-  /*memset (m_data, (uint8_t)1, dataSize);
-  m_size = dataSize;
-  delete [] m_data;
-  //m_data = new uint8_t [dataSize];
-  m_dataSize = dataSize;
-  m_data = data;*/
 }
 
 void

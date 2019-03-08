@@ -129,7 +129,9 @@ public:
    * \param dataSize The desired size of the final echo data.
    */
   void SetFill (uint8_t *fill, uint32_t fillSize, uint32_t dataSize);
-  void SetFill (uint8_t data[], uint32_t dataSize);
+
+  //helper to call the client's SetFill(bool comp, uint32_t size) function
+  void SetFill (bool comp, uint32_t dataSize);
 
 protected:
   virtual void DoDispose (void);
