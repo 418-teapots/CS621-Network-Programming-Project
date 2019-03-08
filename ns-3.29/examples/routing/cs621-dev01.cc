@@ -86,19 +86,6 @@ NS_LOG_COMPONENT_DEFINE ("SimpleGlobalRoutingExample");
 int
 main (int argc, char *argv[])
 {
-  // Users may find it convenient to turn on explicit debugging
-  // for selected modules; the below lines suggest how to do this
-/*#if 0
-  LogComponentEnable ("SimpleGlobalRoutingExample", LOG_LEVEL_INFO);
-#endif*/
-
-  // Set up some default values for the simulation.  Use the
-  /*
-  Config::SetDefault ("ns3::OnOffApplication::PacketSize", UintegerValue (210));
-  Config::SetDefault ("ns3::OnOffApplication::DataRate", StringValue ("448kb/s"));
-*/
-  //DefaultValue::Bind ("DropTailQueue::m_maxPackets", 30);
-
   // Allow the user to override any of the defaults and the above
   // DefaultValue::Bind ()s at run-time, via command-line arguments
   CommandLine cmd;
