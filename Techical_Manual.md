@@ -21,7 +21,7 @@ library, and a full API reference. You should explore and make use of all of the
 1) Download ns-3.29
 Type the following on the Linux shell:
 
-$ cd
+```cd```
 $ mkdir workspace
 $ cd workspace
 $ wget https://www.nsnam.org/release/ns-allinone-3.29.tar.bz2
