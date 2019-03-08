@@ -217,10 +217,14 @@ main (int argc, char *argv[])
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
 
-  //generate tr file
+  //generate pcap files
   AsciiTraceHelper ascii;
   p2p.EnableAsciiAll (ascii.CreateFileStream ("cs621-dev01.tr"));
-  p2p.EnablePcapAll ("cs621-dev01");
+  p2p.EnablePcap("UDPsender.pcap",d0d1.Get(0), false, true);
+  p2p.EnablePcap("UDPreceiver.pcap",d2d3.Get(1), false, true);
+  p2p.EnablePcap("Compression.pcap",d1d2.Get(0), false, true);
+  p2p.EnablePcap("Decompression.pcap",d1d2.Get(1), false, true);
+  //p2p.EnablePcapAll ("cs621-dev01");
 
   //Flow Monitor
   //Use flow monitor to get stats on when the last packet in the packet train arrives
