@@ -142,6 +142,7 @@ main (int argc, char *argv[])
   // (Client)
   // Create a RequestResponseClient application to send UDP datagrams from node zero to node three.
 
+  //The first client will send packet train with empty data (all zeroes)
 
   //Time interPacketInterval = Seconds (1.);
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
@@ -154,21 +155,24 @@ main (int argc, char *argv[])
 
 
 
+  //The second client will send packet train with random data (high entropy)
 
   RequestResponseClientHelper client2 (i2i3.GetAddress (1), port);
   client2.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
 //client2.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
-  client2.SetFill(apps.Get((uint32_t)0), true , (uint32_t)packetSize);
+  client2.SetFill(apps.Get((uint32_t)0), true , (uint32_t)packetSize); //Call this function to make high entropy data
   apps.Start (Seconds (2.0));
   apps.Stop (Seconds (20.0));
 
+  //generate tr file
   AsciiTraceHelper ascii;
   p2p.EnableAsciiAll (ascii.CreateFileStream ("cs621-dev01.tr"));
   p2p.EnablePcapAll ("cs621-dev01");
 
-  // Flow Monitor
+  //Flow Monitor
+  //Use flow monitor to get stats on when the last packet in the packet train arrives
   FlowMonitorHelper flowmonHelper;
   Ptr<FlowMonitor> monitor = flowmonHelper.InstallAll ();
   NS_LOG_INFO ("Run Simulation.");
@@ -178,9 +182,9 @@ main (int argc, char *argv[])
   monitor->CheckForLostPackets ();
   Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
   std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats ();
-  int64_t first = 0;
-  int64_t second = 0;
-  int count = 0;
+  int64_t first = 0; //save time for first packet train
+  int64_t second = 0; //save time for second packet train
+  int count = 0; //count how many packet trains were detected
   for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin (); iter != stats.end (); ++iter)
     {
       Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
@@ -195,12 +199,14 @@ main (int argc, char *argv[])
       }
 
     }
+
+  //if the flow monitor detected more than two trains, there is something wrong
   if (count > 2)
   {
     cout << "more than two trains sent" << endl;
   }
   else {
-    if (abs(first-second) > threshold) {
+    if (abs(first-second) > threshold) { //if the difference between the two trains is bigger than the threshhold 
       cout << "Compression Detected" << endl;
     }
     else {
