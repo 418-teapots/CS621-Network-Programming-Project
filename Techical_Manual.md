@@ -37,10 +37,21 @@ You can run the unit tests of the ns-3 distribution by running the ./test.py scr
 ```make```  
 ```make check```  
 ```sudo make install```  
+  
+2) ***Build ns-3 with zlib***  
+TODO  
+
 
 ## 3. Application 
 1) ***Run***  
-run.py using commandline: "python run.py"  
+Under the ns-3 top directory, you can run the application by typing the following:
+  
+```./waf --run cs621-dev01```  
+  
+2) ***Run Simulation***  
+You can run the network simulation by using python script:  
+  
+```python run.py```  
   
   
 
