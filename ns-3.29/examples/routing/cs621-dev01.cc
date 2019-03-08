@@ -55,6 +55,7 @@
 #include <cstring>
 #include <iomanip>
 #include <map>
+#include <zlib.h>
 
 #include "ns3/ptr.h"
 #include "ns3/object.h"
