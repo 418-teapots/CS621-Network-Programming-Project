@@ -49,7 +49,7 @@ Under the ns-3 top directory, you can run the application by typing the followin
 ```./waf --run cs621-dev01```  
   
 2) ***Run Simulation***  
-You can run the network simulation by using python script:  
+You can run the network simulation by using python script. Type the following:  
   
 ```python run.py```  
   
