@@ -1,5 +1,5 @@
 packetSize = 1100
-maxPacketCount = 2
+maxPacketCount = 6000
 outerDataRate = 8Mbps
 threshold = 100
 compressionLinkCapacity = 5

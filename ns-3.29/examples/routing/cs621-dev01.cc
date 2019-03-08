@@ -209,7 +209,7 @@ main (int argc, char *argv[])
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client.Install (c.Get (0));
   apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (20.0));
+  apps.Stop (Seconds (25.0));
 
 
 
@@ -222,7 +222,7 @@ main (int argc, char *argv[])
   apps = client2.Install (c.Get (0));
   client2.SetFill(apps.Get((uint32_t)0), true , (uint32_t)packetSize); //Call this function to make high entropy data
   apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (20.0));
+  apps.Stop (Seconds (25.0));
 
   //generate pcap files
   AsciiTraceHelper ascii;
@@ -254,9 +254,9 @@ main (int argc, char *argv[])
       {
         FlowMonitor::FlowStats fs = iter->second;
         if (first == 0)
-          first = fs.timeLastRxPacket.GetMilliSeconds();
+          first = fs.timeLastRxPacket.GetMilliSeconds() - fs.timeFirstRxPacket.GetMilliSeconds();
         else
-          second = fs.timeLastRxPacket.GetMilliSeconds();
+          second = fs.timeLastRxPacket.GetMilliSeconds() - fs.timeFirstRxPacket.GetMilliSeconds();
         count ++;
       }
 
@@ -269,10 +269,10 @@ main (int argc, char *argv[])
   }
   else {
     if (abs(first-second) > threshold) { //if the difference between the two trains is bigger than the threshhold
-      cout << "Compression Detected" << endl;
+      cout << std::__cxx11::to_string((int) first) << " and " << std::__cxx11::to_string((int) second) << " Compression Detected" << endl;
     }
     else {
-      cout << "Compression Not Detected :(" << endl;
+      cout << std::__cxx11::to_string((int) first) << " and " << std::__cxx11::to_string((int) second) << " Compression Not Detected :(" << endl;
     }
   }
   NS_LOG_INFO ("Done.");
