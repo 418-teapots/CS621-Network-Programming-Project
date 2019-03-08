@@ -9,8 +9,6 @@
 !/ns-3.29/src/applications/helper/request-response-helper.h
 !/ns-3.29/src/applications/model/request-response-server.cc
 !/ns-3.29/src/applications/model/request-response-server.h
-!/ns-3.29/src/point-to-point/model/cs621-ppp-net-device.cc
-!/ns-3.29/src/point-to-point/model/cs621-ppp-net-device.h
 !/ns-3.29/src/point-to-point/model/point-to-point-net-device.cc
 !/ns-3.29/src/point-to-point/model/point-to-point-net-device.h
 !/ns-3.29/src/point-to-point/model/ppp-header.cc
