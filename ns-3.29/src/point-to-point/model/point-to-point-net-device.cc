@@ -405,6 +405,31 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
     }
   else 
     {
+      PppHeader ppp;
+      packet->RemoveHeader (ppp);
+      if (ppp.GetProtocol() == 0x4021) {
+        AddHeader (packet, 0x0800);
+        //get data
+        uint8_t *readBuffer = new uint8_t[packet->GetSize()];
+        packet->CopyData(readBuffer, packet->GetSize());
+        unsigned char* dataBeforeDecompression = readBuffer;
+
+        //decompress
+        //TODO: Call Decompress() from dataBeforeDecompression to dataAfterDecompression;
+        unsigned char* dataAfterDecompression = dataBeforeDecompression;
+        //remove 0x0021
+        unsigned char* originalData = new unsigned char[packet->GetSize()];
+
+        for (uint i = 0; i < sizeof(dataAfterDecompression)-4; i++) {
+          originalData[i] = dataAfterDecompression[i+4];
+        }
+        //update data
+        packet->CopyData(originalData, packet->GetSize());
+
+      } else {
+        packet->AddHeader (ppp);
+      }
+      
       // 
       // Hit the trace hooks.  All of these hooks are in the same place in this 
       // device because it is so simple, but this is not usually the case in
@@ -427,6 +452,15 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       // normal receive callback sees.
       //
       ProcessHeader (packet, protocol);
+      
+      /*
+      std::cout<<"Receive";
+      PppHeader ppp;
+      packet->RemoveHeader (ppp);
+      protocol = PppToEther (ppp.GetProtocol ());
+      std::cout<<ppp.GetProtocol ()<<" and protocol: "<<protocol<<"\n";
+      */
+
 
       if (!m_promiscCallback.IsNull ())
         {
