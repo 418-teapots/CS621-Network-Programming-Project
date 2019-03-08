@@ -44,8 +44,3 @@ run.py using commandline: "python run.py"
   
   
 
-
-## Collaborators 
-Kei Fukutani - kayfuku   
-Domingo Haung - DomingoWong   
-Tae Lee - leeth7830  
