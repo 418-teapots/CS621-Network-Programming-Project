@@ -19,7 +19,7 @@ Type the following on the Linux shell:
 ```cd GitHub```
 ```git clone https://github.com/418-teapots/CS621-Network-Programming-Project.git```
 
-## 1. NS-3.29
+## 2. NS-3.29
 1) ***Install ns-3.29***  
 Type the following on the Linux shell:  
 
