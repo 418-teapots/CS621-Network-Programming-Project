@@ -14,7 +14,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-//Example commandline: ./waf --run "cs621-dev01 --cap=1"
+//Example commandline: ./waf --run "cs621-dev01 --cap=1 --comp=1"
 
 // Network topology (CS621 project 1)
 //
@@ -161,6 +161,13 @@ main (int argc, char *argv[])
   p2p.SetDeviceAttribute ("DataRate", StringValue (innerDataRate));
 //  p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
   NetDeviceContainer d1d2 = p2p.Install (n1n2); //inner link
+  Ptr<NetDevice> compressionDevice = d1d2.Get(0);
+  Ptr<PointToPointNetDevice> p2pCompDevice = StaticCast<PointToPointNetDevice>(compressionDevice);
+  Ptr<NetDevice> decompressionDevice = d1d2.Get(1);
+  Ptr<PointToPointNetDevice> p2pDecompDevice = StaticCast<PointToPointNetDevice>(compressionDevice);
+  p2pCompDevice->SetCompressionFlag(useCompression);
+  p2pDecompDevice->SetDecompressionFlag(useCompression);
+
 
   //Add IP addresses
   NS_LOG_INFO ("Assign IP Addresses.");
