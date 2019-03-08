@@ -45,7 +45,7 @@ You can run the unit tests of the ns-3 distribution by running the ./test.py scr
 Copy the ns-3.29 directory generated to the GitHub repository created earlier.  
 Do not overwrite the exisiting files.  
 
-```cp -n ns-3.29 ~/Github/CS621-Network-Programming-Project/```
+```cp -nr ns-3.29 ~/Github/CS621-Network-Programming-Project/```
 
 ## 3. Application 
 1) ***Test***  
