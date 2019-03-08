@@ -339,7 +339,6 @@ def print_config(env, phase='configure'):
 
 def configure(conf):
     conf.load('relocation', tooldir=['waf-tools'])
-    conf.check(mandatory=True, lib='z', uselib_store='LZ')
     # attach some extra methods
     conf.check_nonfatal = types.MethodType(_check_nonfatal, conf)
     conf.check_compilation_flag = types.MethodType(_check_compilation_flag, conf)
@@ -593,7 +592,7 @@ def configure(conf):
             conf.env.append_value('EXAMPLE_DIRECTORIES', dir)
     except OSError:
         return
-
+    conf.env['lz'] = conf.check(mandatory=True, lib='z', uselib_store='LZ')
     env['VALGRIND_FOUND'] = False
     try:
         conf.find_program('valgrind', var='VALGRIND')
