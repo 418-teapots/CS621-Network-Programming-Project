@@ -32,7 +32,7 @@ Type the following on the Linux shell:
 2) ***Build***  
 If you downloaded using a tarball you should have a directory called something like ns-allinone-3.29 under your ~/workspace directory. Type the following:
 
-```cd ns-allinone-3.29```
+```cd ns-allinone-3.29```  
 ```./build.py --enable-examples --enable-tests```  
   
 3) ***Test for installation***  
