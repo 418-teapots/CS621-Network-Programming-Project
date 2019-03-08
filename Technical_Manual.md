@@ -37,7 +37,7 @@ If you downloaded using a tarball you should have a directory called something l
 ```./build.py --enable-examples --enable-tests```  
   
 3) ***Test for installation***  
-You can run the unit tests of the ns-3 distribution by running the ./test.py script:  
+You can run the unit tests of the ns-3 distribution by running the ./test.py script under the ns-3 top directory:  
   
 ```./test.py```   
 
