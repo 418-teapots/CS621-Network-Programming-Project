@@ -7,6 +7,7 @@
 * [zlib] (https://www.zlib.net/) - Compression Library
 
 # Prerequisite installation 
+* git ```sudo apt install git```  
 * python ```sudo apt-get install python```   
 * zlib ```sudo apt-get install zlib1g-dev```
 
