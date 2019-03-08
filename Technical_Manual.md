@@ -57,7 +57,7 @@ Under the ns-3 top directory, you can run the application by typing the followin
 2) ***Run Simulation***  
 You can run the network simulation by using python script. Type the following:  
 
-```cd /GitHub/CS621-Network-Programming-Project/ ```
+```cd /GitHub/CS621-Network-Programming-Project/ ```   
 ```python run.py```  
   
   
