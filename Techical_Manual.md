@@ -32,7 +32,6 @@ If you downloaded using a tarball you should have a directory called something l
 
 $ ./build.py --enable-examples --enable-tests
 
-
 2.
 
 
