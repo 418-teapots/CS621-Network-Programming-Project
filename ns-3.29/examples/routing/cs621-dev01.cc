@@ -21,27 +21,6 @@
 //      8Mbps               8Mbps
 //  n0 ------- n1 ----- n2 -------n3
 //
-//
-
-
-// (Original)
-// Network topology
-//
-//  n0
-//     \ 5 Mb/s, 2ms
-//      \          1.5Mb/s, 10ms
-//       n2 -------------------------n3
-//      /
-//     / 5 Mb/s, 2ms
-//   n1
-//
-// - all links are point-to-point links with indicated one-way BW/delay
-// - CBR/UDP flows from n0 to n3, and from n3 to n1
-// - FTP/TCP flow from n0 to n3, starting at time 1.2 to time 1.35 sec.
-// - UDP packet size of 210 bytes, with per-packet interval 0.00375 sec.
-//   (i.e., DataRate of 448,000 bps)
-// - DropTail queues
-// - Tracing of queues and packet receptions to file "simple-global-routing.tr"
 
 #include <iostream>
 #include <fstream>
