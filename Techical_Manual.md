@@ -37,7 +37,8 @@ If you downloaded using a tarball you should have a directory called something l
 3) ***Test for installation***  
 You can run the unit tests of the ns-3 distribution by running the ./test.py script:  
   
-```./test.py```
+```./test.py```   
+
 4) ***Copy ns-3.29 folder to the github directory***
 Copy the ns-3.29 directory generated to the GitHub repository created earlier 
 Do not overwrite the exisiting files
