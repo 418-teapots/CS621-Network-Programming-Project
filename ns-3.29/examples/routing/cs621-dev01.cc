@@ -34,7 +34,7 @@
 #include <cstring>
 #include <iomanip>
 #include <map>
-#include <zlib.h>
+#include "zlib.h"
 
 
 #include "ns3/ptr.h"
