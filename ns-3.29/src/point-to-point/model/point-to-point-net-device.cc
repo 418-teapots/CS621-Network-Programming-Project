@@ -698,8 +698,8 @@ PointToPointNetDevice::Send (
 
 
 
-
-
+      // For compression. 
+      
       int outputLen = sizeof(dataBeforeCompress)/sizeof(*dataBeforeCompress);
       printf("outputLen: %u\n", outputLen);
       printf("dataBeforeCompress: \n");
