@@ -30,7 +30,8 @@
 #include "point-to-point-channel.h"
 #include "ppp-header.h"
 #include "zlib.h"
-// #include "cs621-compression-util.cc"
+#include <algorithm>
+#include <iostream>
 
 namespace ns3 {
 
@@ -395,6 +396,9 @@ void
 PointToPointNetDevice::Receive (Ptr<Packet> packet)
 {
   NS_LOG_FUNCTION (this << packet);
+
+  printf("Receive() start.\n");
+  
   uint16_t protocol = 0;
 
   if (m_receiveErrorModel && m_receiveErrorModel->IsCorrupt (packet) ) 
@@ -412,10 +416,16 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       if (ppp.GetProtocol() == 0x4021) {
         AddHeader (packet, 0x0800);
         //get data
-        uint8_t *readBuffer = new uint8_t[packet->GetSize()];
-        packet->CopyData(readBuffer, packet->GetSize());
-        unsigned char* dataBeforeDecompression = readBuffer;
+        const int size = packet->GetSize();
+        printf("size: %u\n", size);
 
+        uint8_t readBuffer[size];
+        packet->CopyData(readBuffer, size);
+        unsigned char dataBeforeDecompression[size];
+        // Copy array readBuffer into array dataBeforeDecompression. 
+        for(int i = 0; i < size; ++i) {
+          dataBeforeDecompression[i] = readBuffer[i];
+        }
 
 
 
@@ -430,7 +440,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         unsigned long src_size2, dest_size2;
         src_size2 = outputLen;
         // src_size2 = dest_size;
-        dest_size2 = 1100 + 100;
+        dest_size2 = src_size2 + 100;
         unsigned char dataAfterDecompression[dest_size2];
 
         // dest_size2 is the size of memory allocated for output.
@@ -444,8 +454,12 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
           printf("failed because of lack of memory.\n");
         } else if (result == Z_BUF_ERROR) {
           printf("failed because of lack of output buffer.\n");
+        } else if (result == Z_DATA_ERROR) {
+          printf("failed because of data error.\n");
+        } else if (result == Z_STREAM_ERROR) {
+          printf("failed because of stream error.\n");
         } else {
-          printf("error.\n");
+          printf("failed because of unknown error.\n");
         }
 
         outputLen = sizeof(dataAfterDecompression)/sizeof(*dataAfterDecompression);
@@ -663,6 +677,8 @@ PointToPointNetDevice::Send (
   NS_LOG_LOGIC ("p=" << packet << ", dest=" << &dest);
   NS_LOG_LOGIC ("UID is " << packet->GetUid ());
 
+  printf("Send() start.\n");
+
   //
   // If IsLinkUp() is false it means there is no channel to send any packet 
   // over so we just hit the drop trace on the packet and return an error.
@@ -682,24 +698,30 @@ PointToPointNetDevice::Send (
     {
       //std::cout << "True";
 
-      uint8_t *readBuffer = new uint8_t[packet->GetSize()];
-      packet->CopyData(readBuffer, packet->GetSize());
+      int size = packet->GetSize();
+      printf("size: %u\n", size);
 
-      unsigned char* dataBeforeCompress = new unsigned char[packet->GetSize()+4];
+      uint8_t readBuffer[size];
+      packet->CopyData(readBuffer, size);
+
+
+      unsigned char dataBeforeCompress[size+4];
       dataBeforeCompress[0] = 0x0;
       dataBeforeCompress[1] = 0x0;
       dataBeforeCompress[2] = 0x2;
       dataBeforeCompress[3] = 0x1;
 
+      printf("sizeof(readBuffer): %lu\n", sizeof(readBuffer));
+
 
       for (uint i = 0; i < sizeof(readBuffer); i++) {
+        // printf("readBuffer[i]: %u\n", readBuffer[i]);
         dataBeforeCompress[i+4] = readBuffer[i];
       }
 
 
-
       // For compression. 
-      
+
       int outputLen = sizeof(dataBeforeCompress)/sizeof(*dataBeforeCompress);
       printf("outputLen: %u\n", outputLen);
       printf("dataBeforeCompress: \n");
@@ -723,8 +745,12 @@ PointToPointNetDevice::Send (
           printf("failed because of lack of memory.\n");
         } else if (result == Z_BUF_ERROR) {
           printf("failed because of lack of output buffer.\n");
+        } else if (result == Z_DATA_ERROR) {
+          printf("failed because of data error.\n");
+        } else if (result == Z_STREAM_ERROR) {
+          printf("failed because of stream error.\n");
         } else {
-          printf("error.\n");
+          printf("failed because of unknown error.\n");
         }
 
       // outputLen = sizeof(dataAfterCompression)/sizeof(*dataAfterCompression);
@@ -744,7 +770,8 @@ PointToPointNetDevice::Send (
         buffer[i] = dataAfterCompression[i];
       }
       */
-      packet->CopyData(dataAfterCompression, 1100);
+      // packet->CopyData(dataAfterCompression, 1100);
+      packet->CopyData(dataAfterCompression, dest_size);
 
 
       // delete[] dataAfterCompression;
@@ -760,6 +787,8 @@ PointToPointNetDevice::Send (
   
 
   m_macTxTrace (packet);
+
+  printf("Send() end.\n");
 
   //
   // We should enqueue and dequeue the packet to hit the tracing hooks.
