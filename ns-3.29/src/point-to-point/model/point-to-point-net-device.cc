@@ -700,10 +700,11 @@ PointToPointNetDevice::Send (
     {
       //std::cout << "True";
 
-      uint8_t *readBuffer = new uint8_t[packet->GetSize()];
-      packet->CopyData(readBuffer, packet->GetSize());
+      uint8_t *readBuffer[packet->GetSize()];
+      int size = packet->GetSize();
+      packet->CopyData(readBuffer, size);
 
-      unsigned char* dataBeforeCompress = new unsigned char[packet->GetSize()+4];
+      unsigned char* dataBeforeCompress = new unsigned char[size+4];
       dataBeforeCompress[0] = 0x0;
       dataBeforeCompress[1] = 0x0;
       dataBeforeCompress[2] = 0x2;
