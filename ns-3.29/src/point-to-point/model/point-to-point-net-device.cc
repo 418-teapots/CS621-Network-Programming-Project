@@ -406,25 +406,93 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
   else 
     {
       PppHeader ppp;
+
+      printf("RemoveHeader() start.\n");
       packet->RemoveHeader (ppp);
+      printf("GetProtocol() start.\n");
       if (ppp.GetProtocol() == 0x4021) {
-        AddHeader (packet, 0x0800);
+        printf("inside if statement.\n");
+
+        // AddHeader (packet, 0x0800);
         //get data
         uint8_t *readBuffer = new uint8_t[packet->GetSize()];
         packet->CopyData(readBuffer, packet->GetSize());
         unsigned char* dataBeforeDecompression = readBuffer;
+        int size = packet->GetSize();
+        printf("size: %u\n", size);
+
+        uint8_t readBuffer[size];
+        packet->CopyData(readBuffer, size);
+        unsigned char dataBeforeDecompression[size];
+        // Copy array readBuffer into array dataBeforeDecompression. 
+        for(int i = 0; i < size; ++i) {
+          dataBeforeDecompression[i] = readBuffer[i];
+        }
+
+
+        int outputLen = sizeof(dataBeforeDecompression)/sizeof(*dataBeforeDecompression);
+        printf("outputLen: %u\n", outputLen);
+        printf("dataBeforeDecompression: \n");
+        for (int i = 0; i < outputLen; i++) {
+            printf("%u ", dataBeforeDecompression[i]);
+        }
+        printf("\n");
+
+        unsigned long src_size2, dest_size2;
+        src_size2 = outputLen;
+        // src_size2 = dest_size;
+        dest_size2 = src_size2 + 100;
+        unsigned char dataAfterDecompression[dest_size2];
+
+        // dest_size2 is the size of memory allocated for output.
+        // The uncompress function writes to dest_size2 the size of data decompressed. 
+        int result = uncompress((unsigned char*)dataAfterDecompression, &dest_size2, (unsigned char*)dataBeforeDecompression, src_size2);
+
+
+        if (result == Z_OK) {
+          printf("Decompressed.\nbefore decompression= %lu byte、after decompression= %lu byte\n", src_size2, dest_size2);
+        } else if (result == Z_MEM_ERROR) {
+          printf("failed because of lack of memory.\n");
+        } else if (result == Z_BUF_ERROR) {
+          printf("failed because of lack of output buffer.\n");
+        } else if (result == Z_DATA_ERROR) {
+          printf("failed because the deflate data is invalid or incomplete.\n");
+        } else if (result == Z_STREAM_ERROR) {
+          printf("failed because of stream error.\n");
+        } else {
+          printf("failed because of unknown error.\n");
+        }
+
+        outputLen = sizeof(dataAfterDecompression)/sizeof(*dataAfterDecompression);
+        printf("outputLen: %u\n", outputLen);
+        printf("dataAfterDecompression: \n");
+        for (int i = 0; i < outputLen; i++) {
+          printf("%u ", dataAfterDecompression[i]);
+        }
+        printf("\n\n");
+
+
 
         //decompress
         //TODO: Call Decompress() from dataBeforeDecompression to dataAfterDecompression;
         unsigned char* dataAfterDecompression = dataBeforeDecompression;
         //remove 0x0021
-        unsigned char* originalData = new unsigned char[packet->GetSize()];
-
-        for (uint i = 0; i < sizeof(dataAfterDecompression)-4; i++) {
-          originalData[i] = dataAfterDecompression[i+4];
+        unsigned char originalData[outputLen - 4];
+        for (int i = 0; i + 4 < outputLen; i++) {
+          originalData[i] = dataAfterDecompression[i + 4];
         }
+
         //update data
         packet->CopyData(originalData, packet->GetSize());
+        printf("update data start.\n");
+        // packet->CopyData(originalData, size;
+        int sizeData = sizeof(originalData)/sizeof(*originalData);
+        Ptr<Packet> packet = Create<Packet> (originalData, sizeData);
+        AddHeader (packet, 0x0021);
+        printf("update data end.\n");
+
+
+        // delete[] dataAfterDecompression;
 
       } else {
         packet->AddHeader (ppp);
@@ -469,6 +537,11 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         }
 
       m_macRxTrace (originalPacket);
+
+      printf("m_macRxTrace() start.\n");
+      m_macRxTrace (originalPacket);
+
+      printf("m_rxCallback() start.\n");
       m_rxCallback (this, packet, protocol, GetRemote ());
     }
 }
@@ -641,17 +714,65 @@ PointToPointNetDevice::Send (
         dataBeforeCompress[i+4] = readBuffer[i];
       }
 
-      //Call Compress() from dataBeforeCompress to dataAfterCompression;
-      unsigned char* dataAfterCompression = dataBeforeCompress;
+
+      // For compression. 
+
+      int outputLen = sizeof(dataBeforeCompress)/sizeof(*dataBeforeCompress);
+      printf("outputLen: %u\n", outputLen);
+      printf("dataBeforeCompress: \n");
+      for (int i = 0; i < outputLen; i++) {
+          printf("%u ", dataBeforeCompress[i]);
+      }
+      printf("\n");
+
+      unsigned long src_size, dest_size;
+      src_size = outputLen;
+      dest_size = src_size + 100;
+      unsigned char dataAfterCompression[dest_size];
+
+      // dest_size is the size of memory allocated for output.
+      // The compress function writes to dest_size the size of data compressed. 
+      int result = compress((unsigned char*)dataAfterCompression, &dest_size, (unsigned char*)dataBeforeCompress, src_size);
+
+      if (result == Z_OK) {
+          printf("Compressed.\nbefore compression= %lu byte、after compression= %lu byte\n", src_size, dest_size);
+        } else if (result == Z_MEM_ERROR) {
+          printf("failed because of lack of memory.\n");
+        } else if (result == Z_BUF_ERROR) {
+          printf("failed because of lack of output buffer.\n");
+        } else if (result == Z_STREAM_ERROR) {
+          printf("failed because of stream error.\n");
+        } else {
+          printf("failed because of unknown error.\n");
+        }
+
+      unsigned char dataAfterCompression2[dest_size];
+      for (uint i = 0; i < dest_size; i++) {
+        dataAfterCompression2[i] = dataAfterCompression[i];
+      }
+
+      outputLen = sizeof(dataAfterCompression2)/sizeof(*dataAfterCompression2);
+      printf("dataAfterCompression2: \n");
+      for (int i = 0; i < outputLen; i++) {
+        printf("%u ", dataAfterCompression2[i]);
+      }
+      printf("\n\n");
 
 
-      AddHeader (packet, 0x4021);
       /*uint8_t *buffer = new uint8_t[1100];
       for (uint i = 0; i < sizeof(dataAfterCompression); i++) {
         buffer[i] = dataAfterCompression[i];
       }
       */
-      packet->CopyData(dataAfterCompression, 1100);
+      // packet->CopyData(dataAfterCompression, 1100);
+      // packet->CopyData(dataAfterCompression2, dest_size);
+
+      printf("Create new packet.\n");
+      Ptr<Packet> packet = Create<Packet> (dataAfterCompression2, dest_size);
+      AddHeader (packet, 0x4021);
+
+      // delete[] dataAfterCompression;
+
     } 
   else {
     AddHeader (packet, protocolNumber);
@@ -786,7 +907,8 @@ PointToPointNetDevice::PppToEther (uint16_t proto)
     {
     case 0x0021: return 0x0800;   //IPv4
     case 0x0057: return 0x86DD;   //IPv6
-    case 0x4021: return 0x0800;   //Compression IPv4
+    // case 0x4021: return 0x0800;   //Compression IPv4
+    case 0x4021: return 0x4021;   //Compression IPv4
     default: NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
     }
   return 0;
