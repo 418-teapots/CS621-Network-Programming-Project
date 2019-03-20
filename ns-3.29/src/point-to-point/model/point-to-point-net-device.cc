@@ -680,6 +680,10 @@ PointToPointNetDevice::Send (
   NS_LOG_LOGIC ("p=" << packet << ", dest=" << &dest);
   NS_LOG_LOGIC ("UID is " << packet->GetUid ());
 
+  printf("packet: \n");
+  std::string packetStr = packet->ToString();
+  std::cout << packetStr << std::endl;
+
   //
   // If IsLinkUp() is false it means there is no channel to send any packet 
   // over so we just hit the drop trace on the packet and return an error.
@@ -773,8 +777,12 @@ PointToPointNetDevice::Send (
       // packet->CopyData(dataAfterCompression2, dest_size);
 
       printf("Create new packet.\n");
-      Ptr<Packet> packet = Create<Packet> (dataAfterCompression2, dest_size);
-      AddHeader (packet, 0x4021);
+      Ptr<Packet> packetCompressed = Create<Packet> (dataAfterCompression2, dest_size);
+      AddHeader (packetCompressed, 0x4021);
+
+      printf("packetCompressed: \n");
+      std::string packetStr2 = packetCompressed->ToString();
+      std::cout << packetStr2 << std::endl;
 
       // delete[] dataAfterCompression;
 
@@ -788,7 +796,6 @@ PointToPointNetDevice::Send (
   printf("Send() end.\n");
 
   
-
   m_macTxTrace (packet);
 
   //
