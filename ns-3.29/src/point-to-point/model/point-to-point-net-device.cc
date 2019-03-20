@@ -29,6 +29,9 @@
 #include "point-to-point-net-device.h"
 #include "point-to-point-channel.h"
 #include "ppp-header.h"
+#include "zlib.h"
+#include <algorithm>
+#include <iostream>
 
 namespace ns3 {
 
@@ -415,14 +418,13 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
 
         // AddHeader (packet, 0x0800);
         //get data
-        uint8_t *readBuffer = new uint8_t[packet->GetSize()];
-        packet->CopyData(readBuffer, packet->GetSize());
-        unsigned char* dataBeforeDecompression = readBuffer;
         int size = packet->GetSize();
         printf("size: %u\n", size);
 
         uint8_t readBuffer[size];
         packet->CopyData(readBuffer, size);
+        // unsigned char* dataBeforeDecompression = readBuffer;
+
         unsigned char dataBeforeDecompression[size];
         // Copy array readBuffer into array dataBeforeDecompression. 
         for(int i = 0; i < size; ++i) {
@@ -471,11 +473,6 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         }
         printf("\n\n");
 
-
-
-        //decompress
-        //TODO: Call Decompress() from dataBeforeDecompression to dataAfterDecompression;
-        unsigned char* dataAfterDecompression = dataBeforeDecompression;
         //remove 0x0021
         unsigned char originalData[outputLen - 4];
         for (int i = 0; i + 4 < outputLen; i++) {
@@ -700,21 +697,26 @@ PointToPointNetDevice::Send (
     {
       //std::cout << "True";
 
-      uint8_t *readBuffer[packet->GetSize()];
       int size = packet->GetSize();
+      printf("size: %u\n", size);
+
+      uint8_t readBuffer[size];
       packet->CopyData(readBuffer, size);
 
-      unsigned char* dataBeforeCompress = new unsigned char[size+4];
+
+      unsigned char dataBeforeCompress[size+4];
       dataBeforeCompress[0] = 0x0;
       dataBeforeCompress[1] = 0x0;
       dataBeforeCompress[2] = 0x2;
       dataBeforeCompress[3] = 0x1;
 
+      printf("sizeof(readBuffer): %lu\n", sizeof(readBuffer));
+
 
       for (uint i = 0; i < sizeof(readBuffer); i++) {
+        // printf("readBuffer[i]: %u\n", readBuffer[i]);
         dataBeforeCompress[i+4] = readBuffer[i];
       }
-
 
       // For compression. 
 
