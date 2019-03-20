@@ -425,15 +425,17 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         int size = packet->GetSize();
         printf("size: %u\n", size);
 
-        uint8_t readBuffer[size];
+        // uint8_t readBuffer[size];
         packet->CopyData(readBuffer, size);
-        unsigned char dataBeforeDecompression[size];
+        // unsigned char dataBeforeDecompression[size];
         // Copy array readBuffer into array dataBeforeDecompression. 
         for(int i = 0; i < size; ++i) {
           dataBeforeDecompression[i] = readBuffer[i];
         }
 
 
+        // For uncompression. 
+        
         int outputLen = sizeof(dataBeforeDecompression)/sizeof(*dataBeforeDecompression);
         printf("outputLen: %u\n", outputLen);
         printf("dataBeforeDecompression: \n");
@@ -476,10 +478,6 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         printf("\n\n");
 
 
-
-        //decompress
-        //TODO: Call Decompress() from dataBeforeDecompression to dataAfterDecompression;
-        unsigned char* dataAfterDecompression = dataBeforeDecompression;
         //remove 0x0021
         unsigned char originalData[outputLen - 4];
         for (int i = 0; i + 4 < outputLen; i++) {
@@ -487,9 +485,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         }
 
         //update data
-        packet->CopyData(originalData, packet->GetSize());
         printf("update data start.\n");
-        // packet->CopyData(originalData, size;
+        // packet->CopyData(originalData, size);
         int sizeData = sizeof(originalData)/sizeof(*originalData);
         Ptr<Packet> packet = Create<Packet> (originalData, sizeData);
         AddHeader (packet, 0x0021);
