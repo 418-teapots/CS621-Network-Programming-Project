@@ -399,6 +399,11 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
   uint16_t protocol = 0;
 
   printf("Receive() start.\n");
+  printf("packet: \n");
+  std::string packetStr = packet->ToString();
+  std::cout << packetStr << std::endl;
+
+  
 
   if (m_receiveErrorModel && m_receiveErrorModel->IsCorrupt (packet) ) 
     {
