@@ -713,6 +713,7 @@ PointToPointNetDevice::Send (
 
       uint8_t readBuffer[size];
       packet->CopyData(readBuffer, size);
+      printf("sizeof(readBuffer): %lu\n", sizeof(readBuffer));
 
 
       unsigned char dataBeforeCompress[size+4];
@@ -721,7 +722,6 @@ PointToPointNetDevice::Send (
       dataBeforeCompress[2] = 0x2;
       dataBeforeCompress[3] = 0x1;
 
-      printf("sizeof(readBuffer): %lu\n", sizeof(readBuffer));
 
 
       for (uint i = 0; i < sizeof(readBuffer); i++) {
