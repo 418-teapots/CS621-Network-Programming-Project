@@ -398,6 +398,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
   NS_LOG_FUNCTION (this << packet);
   uint16_t protocol = 0;
 
+  printf("Receive() start.\n");
+
   if (m_receiveErrorModel && m_receiveErrorModel->IsCorrupt (packet) ) 
     {
       // 
@@ -783,6 +785,7 @@ PointToPointNetDevice::Send (
     // 0021 -> 4021
   }
 
+  printf("Send() end.\n");
 
   
 
