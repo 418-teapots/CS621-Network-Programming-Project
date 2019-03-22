@@ -773,20 +773,23 @@ PointToPointNetDevice::Send (
       printf("\n\n");
 
 
+
+      AddHeader (packet, 0x4021);
+
       /*uint8_t *buffer = new uint8_t[1100];
       for (uint i = 0; i < sizeof(dataAfterCompression); i++) {
         buffer[i] = dataAfterCompression[i];
       }
       */
       // packet->CopyData(dataAfterCompression, 1100);
-      // packet->CopyData(dataAfterCompression2, dest_size);
+      packet->CopyData(dataAfterCompression2, dest_size);
 
-      printf("Create new packet.\n");
-      Ptr<Packet> packetCompressed = Create<Packet> (dataAfterCompression2, dest_size);
-      AddHeader (packetCompressed, 0x4021);
+      // printf("Create new packet.\n");
+      // Ptr<Packet> packetCompressed = Create<Packet> (dataAfterCompression2, dest_size);
+      // AddHeader (packetCompressed, 0x4021);
 
-      printf("packetCompressed: \n");
-      std::string packetStr2 = packetCompressed->ToString();
+      printf("packet: \n");
+      std::string packetStr2 = packet->ToString();
       std::cout << packetStr2 << std::endl;
 
       // delete[] dataAfterCompression;
@@ -925,8 +928,8 @@ PointToPointNetDevice::PppToEther (uint16_t proto)
     {
     case 0x0021: return 0x0800;   //IPv4
     case 0x0057: return 0x86DD;   //IPv6
-    // case 0x4021: return 0x0800;   //Compression IPv4
-    case 0x4021: return 0x4021;   //Compression IPv4
+    case 0x4021: return 0x0800;   //Compression IPv4
+    // case 0x4021: return 0x4021;   //Compression IPv4
     default: NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
     }
   return 0;
