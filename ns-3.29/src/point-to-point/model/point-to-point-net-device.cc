@@ -685,6 +685,8 @@ PointToPointNetDevice::Send (
   NS_LOG_LOGIC ("p=" << packet << ", dest=" << &dest);
   NS_LOG_LOGIC ("UID is " << packet->GetUid ());
 
+  printf("Send() start.\n");
+
   printf("packet: \n");
   std::string packetStr = packet->ToString();
   std::cout << packetStr << std::endl;
@@ -722,14 +724,14 @@ PointToPointNetDevice::Send (
       dataBeforeCompress[2] = 0x2;
       dataBeforeCompress[3] = 0x1;
 
-
-
       for (uint i = 0; i < sizeof(readBuffer); i++) {
         // printf("readBuffer[i]: %u\n", readBuffer[i]);
         dataBeforeCompress[i+4] = readBuffer[i];
       }
 
-      // For compression. 
+
+
+      ////// For compression //////
 
       int outputLen = sizeof(dataBeforeCompress)/sizeof(*dataBeforeCompress);
       printf("outputLen: %u\n", outputLen);
@@ -772,9 +774,11 @@ PointToPointNetDevice::Send (
       }
       printf("\n\n");
 
+      ////// compressin end //////
 
 
-      AddHeader (packet, 0x4021);
+      // 
+      AddHeader(packet, 0x4021);
 
       /*uint8_t *buffer = new uint8_t[1100];
       for (uint i = 0; i < sizeof(dataAfterCompression); i++) {
@@ -782,13 +786,20 @@ PointToPointNetDevice::Send (
       }
       */
       // packet->CopyData(dataAfterCompression, 1100);
+      printf("dest_size: %lu\n", dest_size);
+
+
+      // Something wrong here!?
+      // This copies the content of the packet to dataAfterCompression2 ??
       packet->CopyData(dataAfterCompression2, dest_size);
+
 
       // printf("Create new packet.\n");
       // Ptr<Packet> packetCompressed = Create<Packet> (dataAfterCompression2, dest_size);
       // AddHeader (packetCompressed, 0x4021);
 
-      printf("packet: \n");
+      printf("packet after compression: \n");
+      // std::string packetStr2 = packetCompressed->ToString();
       std::string packetStr2 = packet->ToString();
       std::cout << packetStr2 << std::endl;
 
