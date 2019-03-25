@@ -11,8 +11,8 @@ for cap in capList:
             print ('Running for capacity: ' + str(cap) + 'Mbps' + ' with compression')
             os.system('cd ns-3.29' + ' && ' + './waf --run "cs621-dev01 --cap=' + str(cap) + ' --comp=1"')
 
-
-result = [100, 300, 200, 500, 400, 100, 300, 200, 500, 400]
+# TODO
+result = [200, 300, 400, 500, 400, 300, 300, 400, 500, 400]
 
 import numpy as np
 import matplotlib.pyplot as plt
