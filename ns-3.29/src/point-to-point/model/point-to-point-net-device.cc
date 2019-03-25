@@ -455,8 +455,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         dest_size2 = src_size2 + 100;
         unsigned char dataAfterDecompression[dest_size2];
 
-        // dest_size2 is the size of memory allocated for output.
-        // The uncompress function writes to dest_size2 the size of data decompressed. 
+        // dest_size2 is the enough size of memory allocated for output.
+        // The uncompress function writes over dest_size2 the size of decompressed data. 
         int result = uncompress((unsigned char*)dataAfterDecompression, &dest_size2, (unsigned char*)dataBeforeDecompression, src_size2);
 
 
@@ -760,8 +760,8 @@ PointToPointNetDevice::Send (
       dest_size = src_size + 100;
       unsigned char dataAfterCompression[dest_size];
 
-      // dest_size is the size of memory allocated for output.
-      // The compress function writes to dest_size the size of data compressed. 
+      // dest_size is the enough size of memory allocated for output.
+      // The compress function writes over dest_size the size of compressed data. 
       int result = compress((unsigned char*)dataAfterCompression, &dest_size, (unsigned char*)dataBeforeCompress, src_size);
 
       if (result == Z_OK) {
