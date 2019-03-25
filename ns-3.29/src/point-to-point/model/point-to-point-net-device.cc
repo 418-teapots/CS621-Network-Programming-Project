@@ -439,6 +439,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         }
 
 
+        ////// For decompression //////
+
         int outputLen = sizeof(dataBeforeDecompression)/sizeof(*dataBeforeDecompression);
         printf("outputLen: %u\n", outputLen);
         printf("dataBeforeDecompression: \n");
@@ -472,13 +474,23 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
           printf("failed because of unknown error.\n");
         }
 
-        outputLen = sizeof(dataAfterDecompression)/sizeof(*dataAfterDecompression);
+        unsigned char dataAfterDeompression2[dest_size2];
+        for (uint i = 0; i < dest_size2; i++) {
+          dataAfterDeompression2[i] = dataAfterDecompression[i];
+        }
+
+        outputLen = sizeof(dataAfterDeompression2)/sizeof(*dataAfterDeompression2);
         printf("outputLen: %u\n", outputLen);
-        printf("dataAfterDecompression: \n");
+        printf("dataAfterDeompression2: \n");
         for (int i = 0; i < outputLen; i++) {
-          printf("%u ", dataAfterDecompression[i]);
+          printf("%u ", dataAfterDeompression2[i]);
         }
         printf("\n\n");
+
+        ////// Decompression end //////
+
+
+
 
         //remove 0x0021
         unsigned char originalData[outputLen - 4];
@@ -486,6 +498,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
           originalData[i] = dataAfterDecompression[i + 4];
         }
 
+        // This might not be correct!!
+        // because we want copy the decompressed payload to the packet.
         //update data
         packet->CopyData(originalData, packet->GetSize());
         printf("update data start.\n");
@@ -789,8 +803,8 @@ PointToPointNetDevice::Send (
       printf("dest_size: %lu\n", dest_size);
 
 
-      // Something wrong here!?
-      // This copies the content of the packet to dataAfterCompression2 ??
+      // This might not be correct!!
+      // because we want copy the compressed payload to the packet.      
       packet->CopyData(dataAfterCompression2, dest_size);
 
 
