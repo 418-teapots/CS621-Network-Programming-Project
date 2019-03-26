@@ -507,7 +507,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         // packet->CopyData(originalData, size;
         int sizeData = sizeof(originalData)/sizeof(*originalData);
         Ptr<Packet> packet = Create<Packet> (originalData, sizeData);
-        AddHeader (packet, 0x0021);
+        // AddHeader (packet, 0x0021);
+        AddHeader (packet, 0x0800);
         printf("update data end.\n");
 
 
