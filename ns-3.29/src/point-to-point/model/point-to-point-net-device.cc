@@ -407,7 +407,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
     {
       PppHeader ppp;
       packet->RemoveHeader (ppp);
-      if (ppp.GetProtocol() == 0x4021) {
+      if (ppp.GetProtocol() == 0x4021 && GetDecompressionFlag()) {
         AddHeader (packet, 0x0800);
         //get data
         uint8_t *readBuffer = new uint8_t[packet->GetSize()];
@@ -623,7 +623,7 @@ PointToPointNetDevice::Send (
   // shoving it out the door.
   //
 
-  if (protocolNumber == 2048) //&& GetCompressionFlag()
+  if (protocolNumber == 2048 && GetCompressionFlag()) //&& GetCompressionFlag()
     {
       //std::cout << "True";
 

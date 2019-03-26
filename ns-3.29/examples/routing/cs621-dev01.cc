@@ -164,7 +164,7 @@ main (int argc, char *argv[])
   Ptr<NetDevice> compressionDevice = d1d2.Get(0);
   Ptr<PointToPointNetDevice> p2pCompDevice = StaticCast<PointToPointNetDevice>(compressionDevice);
   Ptr<NetDevice> decompressionDevice = d1d2.Get(1);
-  Ptr<PointToPointNetDevice> p2pDecompDevice = StaticCast<PointToPointNetDevice>(compressionDevice);
+  Ptr<PointToPointNetDevice> p2pDecompDevice = StaticCast<PointToPointNetDevice>(decompressionDevice);
   p2pCompDevice->SetCompressionFlag(useCompression);
   p2pDecompDevice->SetDecompressionFlag(useCompression);
 
