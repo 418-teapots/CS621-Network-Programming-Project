@@ -4,7 +4,7 @@
 def build(bld):
     module = bld.create_ns3_module('point-to-point', ['network', 'mpi'])
 
-    module.use.append("LIB_Z")
+    #module.use.append("LIB_Z")
 
     module.source = [
         'model/point-to-point-net-device.cc',
@@ -36,11 +36,11 @@ def build(bld):
     bld.ns3_python_bindings()
 
 
-def configure(conf):
-    conf.env['ENABLE_z']=conf.check(mandatory=True,
-    libpath=['/usr/local/lib'],
-    includes=['/usr/local/include'],
-    lib='zlib',uselib_store='LIB_Z')
+#def configure(conf):
+#    conf.env['ENABLE_z']=conf.check(mandatory=True,
+#    libpath=['/usr/local/lib'],
+#    includes=['/usr/local/include'],
+#    lib='zlib',uselib_store='LIB_Z')
 
 
 
