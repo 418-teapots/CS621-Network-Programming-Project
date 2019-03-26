@@ -502,7 +502,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         // This might not be correct!!
         // because we want copy the decompressed payload to the packet.
         //update data
-        packet->CopyData(originalData, packet->GetSize());
+        // packet->CopyData(originalData, packet->GetSize());
         printf("update data start.\n");
         // packet->CopyData(originalData, size;
         int sizeData = sizeof(originalData)/sizeof(*originalData);
