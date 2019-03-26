@@ -964,9 +964,7 @@ PointToPointNetDevice::PppToEther (uint16_t proto)
     case 0x0057: return 0x86DD;   //IPv6
     case 0x4021: return 0x0800;   //Compression IPv4
     case 0x0000: return 0x0800;
-    // case 0x4021: return 0x4021;   //Compression IPv4
-    default: return 0x0800;
-    //default: NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
+    default: NS_ASSERT_MSG (false, "PPP Protocol number not defined!");
     }
   return 0;
 }
