@@ -542,6 +542,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       // normal receive callback sees.
       //
       printf("right before ProcessHeader().\n");
+      std::cout<<protocol;
       ProcessHeader (packet, protocol);
       
       /*
