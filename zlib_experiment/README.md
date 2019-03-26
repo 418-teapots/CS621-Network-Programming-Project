@@ -21,12 +21,12 @@ sudo make install
 
 ## 2. Compile 
 
-gcc zlib-test.cc -lz -o zlib-test
+gcc zlib-test2.cc -lz -o zlib-test2
 
 
 ## 3. Run 
 
-./zlib-test
+./zlib-test2
 
 
 

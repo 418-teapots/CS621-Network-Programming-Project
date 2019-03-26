@@ -419,11 +419,16 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
 
       printf("RemoveHeader() start.\n");
       packet->RemoveHeader (ppp);
+<<<<<<< HEAD
       printf("GetProtocol() start.\n");
       if (ppp.GetProtocol() == 0x4021 && GetDecompressionFlag()) {
         printf("inside if statement.\n");
 
         // AddHeader (packet, 0x0800);
+=======
+      if (ppp.GetProtocol() == 0x4021 && GetDecompressionFlag()) {
+        AddHeader (packet, 0x0800);
+>>>>>>> 4af4b15d5a6dc5c0574a0bcaad546bb09cfe347c
         //get data
         int size = packet->GetSize();
         printf("size: %u\n", size);
