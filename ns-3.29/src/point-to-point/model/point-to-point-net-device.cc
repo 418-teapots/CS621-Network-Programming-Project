@@ -523,6 +523,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       // device because it is so simple, but this is not usually the case in
       // more complicated devices.
       //
+      printf("right before m_snifferTrace.\n");
       m_snifferTrace (packet);
       m_promiscSnifferTrace (packet);
       m_phyRxEndTrace (packet);
@@ -531,6 +532,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       // Trace sinks will expect complete packets, not packets without some of the
       // headers.
       //
+      printf("right before originalPacket.\n");
       Ptr<Packet> originalPacket = packet->Copy ();
 
       //
@@ -539,6 +541,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       // there is no difference in what the promisc callback sees and what the
       // normal receive callback sees.
       //
+      printf("right before ProcessHeader().\n");
       ProcessHeader (packet, protocol);
       
       /*
@@ -550,6 +553,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       */
 
 
+      printf("right before if (!m_promiscCallback.IsNull ()).\n");
       if (!m_promiscCallback.IsNull ())
         {
           m_macPromiscRxTrace (originalPacket);
@@ -564,6 +568,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
       printf("m_rxCallback() start.\n");
       m_rxCallback (this, packet, protocol, GetRemote ());
     }
+
+    printf("end of Receive().\n");
 }
 
 Ptr<Queue<Packet> >
