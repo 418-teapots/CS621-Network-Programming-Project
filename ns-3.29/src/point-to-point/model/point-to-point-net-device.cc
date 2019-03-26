@@ -452,7 +452,8 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         unsigned long src_size2, dest_size2;
         src_size2 = outputLen;
         // src_size2 = dest_size;
-        dest_size2 = src_size2 + 100;
+        // dest_size2 = src_size2 + 100;
+        dest_size2 = 2048;
         unsigned char dataAfterDecompression[dest_size2];
 
         // dest_size2 is the enough size of memory allocated for output.
@@ -791,8 +792,10 @@ PointToPointNetDevice::Send (
       ////// compressin end //////
 
 
-      // 
-      AddHeader(packet, 0x4021);
+      printf("Create new packet.\n");
+      Ptr<Packet> newPacket = Create<Packet> (dataAfterCompression2, dest_size);
+      AddHeader (newPacket, 0x4021);
+      packet = newPacket;
 
       /*uint8_t *buffer = new uint8_t[1100];
       for (uint i = 0; i < sizeof(dataAfterCompression); i++) {
@@ -805,12 +808,10 @@ PointToPointNetDevice::Send (
 
       // This might not be correct!!
       // because we want copy the compressed payload to the packet.      
-      packet->CopyData(dataAfterCompression2, dest_size);
+      // packet->CopyData(dataAfterCompression2, dest_size);
 
 
-      // printf("Create new packet.\n");
-      // Ptr<Packet> packetCompressed = Create<Packet> (dataAfterCompression2, dest_size);
-      // AddHeader (packetCompressed, 0x4021);
+      
 
       printf("packet after compression: \n");
       // std::string packetStr2 = packetCompressed->ToString();
