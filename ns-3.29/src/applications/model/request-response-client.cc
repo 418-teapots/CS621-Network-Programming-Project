@@ -30,6 +30,13 @@
 #include "ns3/uinteger.h"
 #include "ns3/trace-source-accessor.h"
 #include "request-response-client.h"
+#include <chrono>
+#include <thread>
+#include <iostream>
+#include <unistd.h>
+#include <fcntl.h>
+#include <fstream>
+#include <bitset>
 
 namespace ns3 {
 
@@ -322,6 +329,48 @@ RequestResponseClient::Send (void)
   Ptr<Packet> p;
   if (m_dataSize)
     {
+      std::ifstream randomfile("randomfile");
+      if (!randomfile.good()) { // if file does not already exist
+          std::ofstream randomoutfile("randomfile"); // makes file and fills it in
+          uint8_t buffer[768000]; // 128*6000 random 8-bit #s
+          int fd = open("/dev/random", O_RDONLY);
+          int size = read(fd, buffer, 768000); // put it in buffer
+          size ++;
+          //buffer now contains the random data
+          close(fd);
+          for (i = 0; i < 6000; ++i) { // 6000 packets: 1 line per
+              for (int j = 0; j < 128; j++) { // 128 numbers * 8 bits = 1024
+                  randomoutfile << std::bitset<8>(buffer[(128 * i) + j]);
+              }
+              randomoutfile << "\n";
+          }
+          randomoutfile.close();
+      }
+      std::string line;
+      i = 0;
+      // reads file in a line at a time as a string
+      // converts string to uint8_t* and puts in packets array
+      while (std::getline(randomfile, line))
+      {
+          //std::istringstream iss(line);
+          //cout << line;
+          //cout << "\n";
+          //cout << sizeof(line);
+          const uint8_t* p = reinterpret_cast<const uint8_t*>(line.c_str());
+          for (int x = 0; x < 1024; x++) {
+              packets[(i*1024) + x] = p[x];
+          }
+
+
+         //std::cout << sizeof(line) << "\n";
+          //if (i > 2) {
+          //    int x = i - 1;
+          //    std::cout << i << " " << sizeof(&packets[i]) <<" " << packets[i] << "\n";
+          //    std::cout << x << " " << sizeof(&packets[i-1]) <<" " << packets[i-1] << "\n";
+          //    std::cout << i-2 << " " << packets[i-2] << "\n\n";
+          //}
+          i++;
+      }
       uint8_t random_data[(int)m_dataSize];
       for (int i=0; i<(int)m_dataSize-1; i++) {
         char c = (char)(random()&0x000000ff);
