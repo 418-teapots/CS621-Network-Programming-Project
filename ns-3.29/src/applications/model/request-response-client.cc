@@ -300,21 +300,10 @@ RequestResponseClient::SetFill (uint8_t *fill, uint32_t fillSize, uint32_t dataS
 void
 RequestResponseClient::SetFill (bool comp, uint32_t dataSize)
 {
-  //NS_LOG_FUNCTION (this << fill << dataSize);
   srand ( time(NULL) );
-  uint8_t random_data[(int)dataSize];
-  for (int i=0; i<(int)dataSize-1; i++) {
-    char c = (char)(random()&0x000000ff);
-    random_data[i]= c;
-  }
-  if (dataSize != m_dataSize)
-    {
-      delete [] m_data;
-      m_data = new uint8_t [dataSize];
-      m_dataSize = dataSize;
-    }
-  memcpy (m_data, random_data, dataSize);
-  m_size = dataSize;
+  m_dataSize = dataSize;
+  //NS_LOG_FUNCTION (this << fill << dataSize);
+
 }
 
 void
@@ -330,10 +319,20 @@ RequestResponseClient::Send (void)
   NS_LOG_FUNCTION (this);
 
   NS_ASSERT (m_sendEvent.IsExpired ());
-
   Ptr<Packet> p;
   if (m_dataSize)
     {
+      uint8_t random_data[(int)m_dataSize];
+      for (int i=0; i<(int)m_dataSize-1; i++) {
+        char c = (char)(random()&0x000000ff);
+        random_data[i]= c;
+      }
+
+          delete [] m_data;
+          m_data = new uint8_t [m_dataSize];
+        
+      memcpy (m_data, random_data, m_dataSize);
+      m_size = m_dataSize;
       //
       // If m_dataSize is non-zero, we have a data buffer of the same size that we
       // are expected to copy and send.  This state of affairs is created if one of

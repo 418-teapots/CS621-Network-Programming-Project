@@ -140,12 +140,12 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Create channels.");
   PointToPointHelper p2p;
   p2p.SetDeviceAttribute ("DataRate", StringValue (outerDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("2"));
   NetDeviceContainer d0d1 = p2p.Install (n0n1); //outer links
   NetDeviceContainer d2d3 = p2p.Install (n2n3); //outer links
 
   p2p.SetDeviceAttribute ("DataRate", StringValue (innerDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue ("10ms"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
   NetDeviceContainer d1d2 = p2p.Install (n1n2); //inner link
   Ptr<NetDevice> compressionDevice = d1d2.Get(0);
   Ptr<PointToPointNetDevice> p2pCompDevice = StaticCast<PointToPointNetDevice>(compressionDevice);
@@ -181,15 +181,15 @@ main (int argc, char *argv[])
   // server.SetAttribute ("PacketSize", UintegerValue (responseSize));
   ApplicationContainer apps = server.Install (c.Get (3));
   apps.Start (Seconds (1.0));
-  apps.Stop (Seconds (2000.0));
+  apps.Stop (Seconds (400.0));
 
   // (Client)
   // Create a RequestResponseClient application to send UDP datagrams from node zero to node three.
 
   //The first client will send packet train with empty data (all zeroes)
 
-  Time interPacketInterval = Seconds (0.05);
-  // Time interPacketIntervalHigh = Seconds (0.03);
+  Time interPacketInterval = Seconds (0.003);
+  //Time interPacketIntervalHigh = Seconds (0.03);
 
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
@@ -197,7 +197,7 @@ main (int argc, char *argv[])
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client.Install (c.Get (0));
   apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (2000.0));
+  apps.Stop (Seconds (400.0));
 
 
 
@@ -209,8 +209,8 @@ main (int argc, char *argv[])
   client2.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client2.Install (c.Get (0));
   client2.SetFill(apps.Get((uint32_t)0), true , (uint32_t)packetSize); //Call this function to make high entropy data
-  apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (2000.0));
+  apps.Start (Seconds (2));
+  apps.Stop (Seconds (400.0));
 
   //generate pcap files
   AsciiTraceHelper ascii;
@@ -227,9 +227,9 @@ main (int argc, char *argv[])
   Ptr<FlowMonitor> monitor = flowmonHelper.InstallAll ();
   NS_LOG_INFO ("Run Simulation.");
   //Simulator::Schedule(Seconds(0.2),&sendHandler,udp, nodes2, Ptr<Packet>(&a));
-  Simulator::Stop (Seconds (2000));
+  Simulator::Stop (Seconds (400));
   Simulator::Run ();
-  monitor->CheckForLostPackets ();
+  //monitor->CheckForLostPackets ();
   Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
   std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats ();
   int64_t first = 0; //save time for first packet train
