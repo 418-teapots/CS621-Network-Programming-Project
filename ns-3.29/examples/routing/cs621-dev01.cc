@@ -188,7 +188,9 @@ main (int argc, char *argv[])
 
   //The first client will send packet train with empty data (all zeroes)
 
-  Time interPacketInterval = Seconds (0.1);
+  Time interPacketInterval = Seconds (0.05);
+  // Time interPacketIntervalHigh = Seconds (0.03);
+
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client.SetAttribute ("Interval", TimeValue (interPacketInterval));
