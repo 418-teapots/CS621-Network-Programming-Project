@@ -154,12 +154,12 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Create channels.");
   PointToPointHelper p2p;
   p2p.SetDeviceAttribute ("DataRate", StringValue (outerDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   NetDeviceContainer d0d1 = p2p.Install (n0n1); //outer links
   NetDeviceContainer d2d3 = p2p.Install (n2n3); //outer links
 
   p2p.SetDeviceAttribute ("DataRate", StringValue (innerDataRate));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("5ms"));
   NetDeviceContainer d1d2 = p2p.Install (n1n2); //inner link
   Ptr<NetDevice> compressionDevice = d1d2.Get(0);
   Ptr<PointToPointNetDevice> p2pCompDevice = StaticCast<PointToPointNetDevice>(compressionDevice);
