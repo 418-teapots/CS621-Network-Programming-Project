@@ -496,7 +496,7 @@ PointToPointNetDevice::Receive (Ptr<Packet> packet)
         //remove 0x0021
         unsigned char originalData[outputLen - 4];
         for (int i = 0; i + 4 < outputLen; i++) {
-          originalData[i] = dataAfterDecompression[i + 4];
+          originalData[i] = dataAfterDeompression2[i + 4];
         }
 
         // This might not be correct!!
