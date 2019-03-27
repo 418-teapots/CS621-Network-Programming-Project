@@ -202,7 +202,7 @@ main (int argc, char *argv[])
 
   //The first client will send packet train with empty data (all zeroes)
 
-  Time interPacketInterval = Seconds (0.0005);
+  Time interPacketInterval = Seconds (0.0001);
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client.SetAttribute ("Interval", TimeValue (interPacketInterval));
@@ -239,7 +239,7 @@ main (int argc, char *argv[])
   Ptr<FlowMonitor> monitor = flowmonHelper.InstallAll ();
   NS_LOG_INFO ("Run Simulation.");
   //Simulator::Schedule(Seconds(0.2),&sendHandler,udp, nodes2, Ptr<Packet>(&a));
-  Simulator::Stop (Seconds (20));
+  Simulator::Stop (Seconds (25));
   Simulator::Run ();
   monitor->CheckForLostPackets ();
   Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
