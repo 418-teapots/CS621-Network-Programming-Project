@@ -10,7 +10,6 @@ def build(bld):
         'model/point-to-point-net-device.cc',
         'model/point-to-point-channel.cc',
         'model/point-to-point-remote-channel.cc',
-        'model/cs621-compression-util.cc', 
         'model/ppp-header.cc',
         'helper/point-to-point-helper.cc',
         ]
