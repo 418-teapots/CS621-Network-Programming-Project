@@ -181,21 +181,21 @@ main (int argc, char *argv[])
   // server.SetAttribute ("PacketSize", UintegerValue (responseSize));
   ApplicationContainer apps = server.Install (c.Get (3));
   apps.Start (Seconds (1.0));
-  apps.Stop (Seconds (65.0));
+  apps.Stop (Seconds (2000.0));
 
   // (Client)
   // Create a RequestResponseClient application to send UDP datagrams from node zero to node three.
 
   //The first client will send packet train with empty data (all zeroes)
 
-  Time interPacketInterval = Seconds (0.01);
+  Time interPacketInterval = Seconds (0.1);
   RequestResponseClientHelper client (i2i3.GetAddress (1), port);
   client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
   client.SetAttribute ("Interval", TimeValue (interPacketInterval));
   client.SetAttribute ("PacketSize", UintegerValue (packetSize));
   apps = client.Install (c.Get (0));
   apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (65.0));
+  apps.Stop (Seconds (2000.0));
 
 
 
@@ -208,7 +208,7 @@ main (int argc, char *argv[])
   apps = client2.Install (c.Get (0));
   client2.SetFill(apps.Get((uint32_t)0), true , (uint32_t)packetSize); //Call this function to make high entropy data
   apps.Start (Seconds (2.0));
-  apps.Stop (Seconds (65.0));
+  apps.Stop (Seconds (2000.0));
 
   //generate pcap files
   AsciiTraceHelper ascii;
@@ -225,7 +225,7 @@ main (int argc, char *argv[])
   Ptr<FlowMonitor> monitor = flowmonHelper.InstallAll ();
   NS_LOG_INFO ("Run Simulation.");
   //Simulator::Schedule(Seconds(0.2),&sendHandler,udp, nodes2, Ptr<Packet>(&a));
-  Simulator::Stop (Seconds (65));
+  Simulator::Stop (Seconds (2000));
   Simulator::Run ();
   monitor->CheckForLostPackets ();
   Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
